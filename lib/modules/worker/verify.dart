@@ -38,9 +38,10 @@ class Verify extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
-                  PinCodeFields(length: 6,onComplete: (output){},
-                  
-                  ),
+                  PinCodeFields(length: 6,onComplete: (output){
+
+                  },
+                    ),
                   SizedBox(
                     height: 30,
                   ),

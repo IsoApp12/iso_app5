@@ -10,6 +10,13 @@ class DioClient{
 
         baseUrl: 'https://isocenter.co/api/',
         receiveDataWhenStatusError: true,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
+          }
         // headers: {
         //   "Access-Control-Allow-Origin": "*", // Required for CORS support to work
         //   "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS

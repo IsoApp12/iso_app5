@@ -3,3 +3,13 @@ class InitialState extends ServicesStates{}
 class WorkerRegisterLoading extends ServicesStates{}
 class WorkerRegisterSuccess extends ServicesStates{}
 class WorkerRegisterError extends ServicesStates{}
+class WorkerLoginLoading extends ServicesStates{}
+class WorkerLoginSuccess extends ServicesStates{}
+class WorkerLoginError extends ServicesStates{}
+class WorkerSetUpLoading extends ServicesStates{}
+class WorkerSetUpSuccess extends ServicesStates{}
+class WorkerSetUpError extends ServicesStates{}
+class cameImageLoading extends ServicesStates{}
+class cameImagSuccess extends ServicesStates{}
+class cameImageError extends ServicesStates{}
+class changeLatSuccess extends ServicesStates{}
