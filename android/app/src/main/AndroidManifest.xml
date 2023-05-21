@@ -2,10 +2,17 @@
     package="com.example.iso_app_5">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Permissions options for the `location` group -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
    <application
         android:label="iso_app_5"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+     <meta-data android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyCbXXQLWMo8mIdDAd_gh9daaeYKx0G-mCc"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -32,7 +39,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-       <meta-data android:name="com.google.android.geo."
-           android:value="AIzaSyCkyxmLI5z30YNC5jF39LzcRDxiAhbRiIE"/>
-    </application>
+
+   </application>
 </manifest>

@@ -17,54 +17,31 @@ class DioClient{
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
           }
-        // headers: {
-        //   "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-        //   "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-        //   "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
-        //   "Access-Control-Allow-Methods": "POST, OPTIONS",
-        //   "Postman-Token":"<calculated when request is sent>",
-        //      "Cache-Control":"no-cache",
-        //        "Content-Type":"multipart/form-data; boundary=<calculated when request is sent>",
-        //     "Content-Length":"<calculated when request is sent>",
-        //     "Host":"<calculated when request is sent>",
-        //     "User-Agent":"PostmanRuntime/7.31.3",
-        //      "Accept":"*/*",
-        //      "Accept-Encoding":"gzip, deflate, br",
-        //     "Connection":"keep-alive"
-        //
-        //
-        //
-        // }
+
       )
     );
   }
 
- static Future<Response>post(
-  {
+  static Future<Response> post({
     required String path,
-    required Map <String,dynamic>data,
-      Map <String,dynamic>?queryParameters,
-         }
-      )async{
-  return  dio!.post(
-      path,data: data,
-      // options:Options(
-      //     followRedirects: false,
-      //     validateStatus: (status) {
-      //       return status! < 500;
-      //     },
-      //   // headers: {  "Postman-Token":"<calculated when request is sent>",
-      //   //   "Cache-Control":"no-cache",
-      //   //   // "Content-Type":"multipart/form-data; boundary=<calculated when request is sent>",
-      //   //   "Content-Length":"<calculated when request is sent>",
-      //   //   "Host":"<calculated when request is sent>",
-      //   //   "User-Agent":"PostmanRuntime/7.31.3",
-      //   //   "Accept":"*/*",
-      //   //   "Accept-Encoding":"gzip, deflate, br",
-      //   //   "Connection":"keep-alive",}
-      // )
-  )
-  ;
-
-}
+    required Map<String, dynamic> data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    return dio!.post(
+      path,
+      data: data,
+    );
+  }
+  static Future<Response> getData({
+    required String url,
+    Map<String,dynamic>?queryParameters,
+    String?token,
+  })async{
+    dio!.options.headers={
+      'Content-Type':'application/json',
+      'lang':'en',
+      'Authorization':'${token}'??'',
+    };
+    return await dio!.get(url,queryParameters: queryParameters);
+  }
 }

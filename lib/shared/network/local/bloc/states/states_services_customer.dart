@@ -1,0 +1,10 @@
+abstract class StatesServicesCustomers{}
+class InitialStateCustomer extends StatesServicesCustomers{}
+class ChangeNavBarCustomer extends StatesServicesCustomers{}
+
+class CustomerEnabledLoacationSuccess extends StatesServicesCustomers{}
+class CustomerEnabledLoacationError extends StatesServicesCustomers{}
+class GetCustomerLocationSuccess extends StatesServicesCustomers{}
+class ChangeLatLngSuccess extends StatesServicesCustomers{}
+class ChangeLatLngError extends StatesServicesCustomers{}
+
