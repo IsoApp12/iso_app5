@@ -10,7 +10,8 @@ import 'package:iso_app_5/shared/network/local/bloc/blocs/registration_bloc.dart
 import 'package:iso_app_5/shared/network/local/bloc/states/registration_states.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  int type;
+  LoginScreen({required this.type,Key? key}) : super(key: key);
  final TextEditingController emailController=TextEditingController();
  final TextEditingController passwordController=TextEditingController();
  var formKey=GlobalKey<FormState>();
@@ -18,7 +19,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ServicesBlocRegistration,RegistrationStates>(
       listener: (context,states){
-        if(states is  WorkerLoginSuccess){
+        if(states is  UserLoginSuccess){
         //  Navigator.push(context, MaterialPageRoute(builder: (context)=>SetUp()));
         }
 
@@ -50,7 +51,7 @@ class LoginScreen extends StatelessWidget {
                           alignment: Alignment.bottomCenter,
                           child:LoginRegisterButton(formKey:formKey,function: (){
                             if(formKey.currentState!.validate()){
-                              ServicesBlocRegistration.get(context)   .workerLogin( email: emailController.text,
+                              ServicesBlocRegistration.get(context)   .userLogin( email: emailController.text,
                                   password: passwordController.text)  ;
 
 

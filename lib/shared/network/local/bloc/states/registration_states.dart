@@ -3,12 +3,13 @@ class InitRegistration extends RegistrationStates{}
 class WorkerRegisterLoading extends RegistrationStates{}
 class WorkerRegisterSuccess extends RegistrationStates{}
 class WorkerRegisterError extends RegistrationStates{}
-class WorkerLoginLoading extends RegistrationStates{}
-class WorkerLoginSuccess extends RegistrationStates{}
+class UserLoginLoading extends RegistrationStates{}
+class UserLoginSuccess extends RegistrationStates{}
+class UserLoginError extends RegistrationStates{}
+
 class CustomerRegisterError extends RegistrationStates{}
 class CustomerRegisterLoading extends RegistrationStates{}
 class CustomerRegisterSuccess extends RegistrationStates{}
-class WorkerLoginError extends RegistrationStates{}
 class WorkerSetUpLoading extends RegistrationStates{}
 class WorkerSetUpSuccess extends RegistrationStates{}
 class WorkerSetUpError extends RegistrationStates{}

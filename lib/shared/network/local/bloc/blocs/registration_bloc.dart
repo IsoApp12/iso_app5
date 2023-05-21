@@ -1,11 +1,12 @@
 import 'dart:io';
-
+import 'package:geocoder2/geocoder2.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:focused_menu_custom/focused_menu.dart';
 import 'package:focused_menu_custom/modals.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:iso_app_5/models/back_end/userlogin.dart';
 import 'package:iso_app_5/models/back_end/worker/customer_register.dart';
@@ -99,23 +100,23 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     });
   }
 
-  WorkerLogin? workerLoginModel;
-  void workerLogin({
+  UserLogin? userLoginModel;
+  void userLogin({
     required String email,
     required String password,
   }) async {
-    emit(WorkerLoginLoading());
+    emit(UserLoginLoading());
     DioClient.post(path: 'login', data: {
       'email': email,
       'password': password,
     }).then((value) {
-      emit(WorkerLoginSuccess());
+      emit(UserLoginSuccess());
       print(value.toString());
-      workerLoginModel = value.data();
-      print(workerLoginModel!.provider!.token);
+      userLoginModel= UserLogin.fromJson( value.data());
+      print(userLoginModel!.provider!.token);
     }).catchError((onError) {
-      emit(WorkerLoginError());
-      print('WorkerLoginError${onError}');
+      emit(UserLoginError());
+      print('user login model${onError}');
     });
   }
 
@@ -167,7 +168,16 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     controller.text=text;
     emit(ChangeControllerText());
  }
+ String? address;
+ getAddress(Position position)async{
+   Geocoder2.getDataFromCoordinates(
+       latitude: position.latitude,
+       longitude:position.longitude,
+       googleMapApiKey: "AIzaSyCbXXQLWMo8mIdDAd_gh9daaeYKx0G-mCc").then((value) {
+         address=value.address;
+   });
 
+ }
 
 
 }

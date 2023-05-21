@@ -16,7 +16,7 @@ class Verify extends StatelessWidget {
       listener: (context,state){
         if(state is VerificationSuccess){
           CacheHelper.setData(key: 'verified', value: true).then((value){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen(type:1111111111111111,)));
           } );
         }
       },

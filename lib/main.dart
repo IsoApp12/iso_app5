@@ -42,7 +42,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (BuildContext context)=>ServicesBlocCustomer()),
+        BlocProvider(create: (BuildContext context)=>ServicesBlocCustomer()..getCategories()
+        ),
         BlocProvider(create: (BuildContext context)=>ServicesBlocRegistration()),
         BlocProvider(create: (BuildContext context)=>ServicesBlocWorker()),
       ],

@@ -1,6 +1,6 @@
-class WorkerLogin {
+class UserLogin {
   Provider? provider;
-  WorkerLogin.fromJson(Map<String, dynamic> json) {
+  UserLogin.fromJson(Map<String, dynamic> json) {
     provider = json['provider'] ;
   }
    }

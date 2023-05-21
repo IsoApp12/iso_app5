@@ -7,4 +7,7 @@ class CustomerEnabledLoacationError extends StatesServicesCustomers{}
 class GetCustomerLocationSuccess extends StatesServicesCustomers{}
 class ChangeLatLngSuccess extends StatesServicesCustomers{}
 class ChangeLatLngError extends StatesServicesCustomers{}
+class GetCategoriesSuccess extends StatesServicesCustomers{}
+class GetCategoriesError extends StatesServicesCustomers{}
+class GetCategoriesLoading extends StatesServicesCustomers{}
 

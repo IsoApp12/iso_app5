@@ -9,6 +9,7 @@ import 'package:iso_app_5/modules/customer/profile.dart';
 import 'package:iso_app_5/modules/customer/time_line.dart';
 import 'package:iso_app_5/modules/worker/workerLayOutScreens/home.dart';
 import 'package:iso_app_5/shared/component/widgets/widget.dart';
+import 'package:iso_app_5/shared/network/global/dio_helper/DioClient.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
 
 
@@ -65,7 +66,17 @@ class ServicesBlocCustomer extends Cubit<StatesServicesCustomers> {
  Position? position;
 
   LatLng? latLng;
-
+getCategories(){
+  emit(GetCategoriesLoading());
+  DioClient.getData(url: 'categories')
+      .then((value) {
+    emit(GetCategoriesSuccess());
+  })
+      .catchError((onError){
+        print(onError);
+        emit(GetCategoriesError());
+  });
+}
 
 
 }
