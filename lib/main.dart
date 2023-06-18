@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iso_app_5/home.dart';
 import 'package:iso_app_5/layouts/customer_layout.dart';
 import 'package:iso_app_5/layouts/worker_layout.dart';
 import 'package:iso_app_5/modules/customer/home.dart';
@@ -12,25 +13,29 @@ import 'package:iso_app_5/modules/registration/set_up_account_provider.dart';
 import 'package:iso_app_5/modules/registration/sign_up.dart';
 import 'package:iso_app_5/modules/worker/workerLayOutScreens/home.dart';
 
-
+import 'package:iso_app_5/modules/worker/workerLayOutScreens/profile.dart';
+import 'package:iso_app_5/shared/component/constants.dart';
 import 'package:iso_app_5/shared/network/global/dio_helper/DioClient.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_customer.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_worker.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/registration_bloc.dart';
+import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
+import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
 
 import 'package:iso_app_5/shared/network/local/cache_helper/cache_helper.dart';
 
 import 'shared/network/local/bloc/bloc_observer.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   HttpOverrides.global = new MyHttpOverrides();
   DioClient.initDio();
-  CacheHelper.initShared();
-  String x='0012056';
-  int? X=int.tryParse(x);
-  print(X);
+  await CacheHelper.initShared();
+  token=await CacheHelper.getData(key: 'token');
+  print('${token}');
+  setTrue=await CacheHelper.getData(key: 'setupDone')== true? true : false;
+  print(setTrue);
   runApp(const MyApp());
 }
 
@@ -47,15 +52,27 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (BuildContext context)=>ServicesBlocRegistration()),
         BlocProvider(create: (BuildContext context)=>ServicesBlocWorker()),
       ],
-      child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: ThemeData(
+      child: BlocConsumer<ServicesBlocWorker,ServicesStatesWorker>(
+        listener: (context,state){},
+        builder: (context,state){
+          return BlocConsumer<ServicesBlocCustomer,ServicesStatesCustomer>(
+            listener: (context,state){},
+            builder: (context,state){
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'Flutter Demo',
+                theme: ThemeData(
 
-          ),
-          home:  SetUpCustomer(),
+                ),
+                home:  WorkerLatOut(),
 
-      ),
+              );
+            },
+          );
+        },
+      )
+
+
     );
   }
 }

@@ -22,17 +22,18 @@ class SignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ServicesBlocRegistration,RegistrationStates>(
       listener:(context,states){
-        if(states is WorkerRegisterSuccess) {
-          CacheHelper.setData(key: 'accountType', value: 0).then((value) {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>Verify(type: CacheHelper.getData(key: 'accountType') ,email: emailController.text,))) ;
-          });
-          if(states is CustomerRegisterSuccess) {
-            CacheHelper.setData(key: 'accountType', value: 1).then((value) {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>Verify(type:  CacheHelper.getData(key: 'accountType'),email: emailController.text,))) ;
-            });
-
-        }
-      } },
+      //   if(states is WorkerRegisterSuccess) {
+      //     CacheHelper.setData(key: 'accountType', value: 0).then((value)async {
+      //       Navigator.push(context, MaterialPageRoute(builder: (context)=>Verify(type: CacheHelper.getData(key: 'accountType') ,email: emailController.text,))) ;
+      //     });
+      //     if(states is CustomerRegisterSuccess) {
+      //       CacheHelper.setData(key: 'accountType', value: 1).then((value) {
+      //         Navigator.push(context, MaterialPageRoute(builder: (context)=>Verify(type:  CacheHelper.getData(key: 'accountType'),email: emailController.text,))) ;
+      //       });
+      //
+      //   }
+      // }
+        },
 
       builder:(context,states){
         var cubit=ServicesBlocWorker.get(context);
@@ -65,7 +66,7 @@ class SignUp extends StatelessWidget {
                           child:LoginRegisterButton(formKey:formKey,function: (){
                             if(formKey.currentState!.validate()){
                             ServicesBlocRegistration.get(context)   .workerRegister(first_name: firstnameController.text, last_name: lastnameController.text, email: emailController.text,
-                             password: passwordController.text, phone:int.parse(phoneController.text.toString()))  ;
+                             password: passwordController.text, phone:phoneController.text)   ;
 
 
 
@@ -77,7 +78,7 @@ class SignUp extends StatelessWidget {
                           child:LoginRegisterButton(formKey:formKey,function: (){
                             if(formKey.currentState!.validate()){
                             ServicesBlocRegistration.get(context). customerRegister(first_name: firstnameController.text, last_name: lastnameController.text, email: emailController.text,
-                             password: passwordController.text, phone:int.parse(phoneController.text.toString()) )  ;
+                             password: passwordController.text, phone:phoneController.text )  ;
 
 
 

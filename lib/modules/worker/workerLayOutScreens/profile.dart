@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,9 +9,9 @@ import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worke
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
-class Profile extends StatelessWidget {
-  Profile({Key? key}) : super(key: key);
-
+class ProfileWorkr extends StatelessWidget {
+  ProfileWorkr({Key? key}) : super(key: key);
+  GlobalKey<ScaffoldState> key2 = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ServicesBlocWorker,ServicesStatesWorker>(
@@ -18,15 +20,8 @@ class Profile extends StatelessWidget {
       builder: (context,states){
         return SafeArea(
           child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0.0,
-              title: Text('Profile',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-              actions: [
-                IconButton(onPressed: (){}, icon: Icon(IconBroken.Notification,color: Colors.black,)),
-                IconButton(onPressed: (){}, icon: Icon(IconBroken.Message,color: Colors.black,)),
-              ],
-            ),
+
+
            body: Padding(
              padding: const EdgeInsets.all(8.0),
              child: Container(

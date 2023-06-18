@@ -30,6 +30,7 @@ class DioClient{
     return dio!.post(
       path,
       data: data,
+      queryParameters: queryParameters
     );
   }
   static Future<Response> getData({

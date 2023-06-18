@@ -1,13 +1,19 @@
-abstract class StatesServicesCustomers{}
-class InitialStateCustomer extends StatesServicesCustomers{}
-class ChangeNavBarCustomer extends StatesServicesCustomers{}
+abstract class ServicesStatesCustomer{}
+class InitialStateCustomer extends ServicesStatesCustomer{}
+class ChangeNavBarCustomer extends ServicesStatesCustomer{}
 
-class CustomerEnabledLoacationSuccess extends StatesServicesCustomers{}
-class CustomerEnabledLoacationError extends StatesServicesCustomers{}
-class GetCustomerLocationSuccess extends StatesServicesCustomers{}
-class ChangeLatLngSuccess extends StatesServicesCustomers{}
-class ChangeLatLngError extends StatesServicesCustomers{}
-class GetCategoriesSuccess extends StatesServicesCustomers{}
-class GetCategoriesError extends StatesServicesCustomers{}
-class GetCategoriesLoading extends StatesServicesCustomers{}
+class CustomerEnabledLoacationSuccess extends ServicesStatesCustomer{}
+class CustomerEnabledLoacationError extends ServicesStatesCustomer{}
+class GetCustomerLocationSuccess extends ServicesStatesCustomer{}
+class ChangeLatLngSuccess extends ServicesStatesCustomer{}
+class ChangeLatLngError extends ServicesStatesCustomer{}
+class GetAddressSuccess extends ServicesStatesCustomer{}
+class GetAddressError extends ServicesStatesCustomer{}
+class GetCategoriesCustomerSuccess extends ServicesStatesCustomer{}
+class GetCategoriesCustomerError extends ServicesStatesCustomer{}
+class GetCategoriesCustomerLoading extends ServicesStatesCustomer{}
+class GetMarkersSuccess extends ServicesStatesCustomer{}
+class LogOutLoading extends ServicesStatesCustomer{}
+class LogOutSuccess extends ServicesStatesCustomer{}
+class LogOutError extends ServicesStatesCustomer{}
 

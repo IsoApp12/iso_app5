@@ -1,9 +1,9 @@
-class Categories {
+class Categoriess {
   List<Category>? categories;
 
-  Categories({this.categories});
+  Categoriess({this.categories});
 
-  Categories.fromJson(Map<String, dynamic> json) {
+  Categoriess.fromJson(Map<String, dynamic> json) {
     if (json['categories'] != null) {
       categories = <Category>[];
       json['categories'].forEach((v) { categories!.add(new Category.fromJson(v)); });
@@ -26,9 +26,10 @@ class Category {
   String? createdAt;
   String? updatedAt;
   Null? deletedAt;
-  List<SubCategories>? subCategories;
+  String? image;
+  List<SubCategoriess>? subCategoriess;
 
-  Category({this.id, this.name, this.arName, this.createdAt, this.updatedAt, this.deletedAt, this.subCategories});
+  Category({this.id, this.name, this.arName, this.createdAt, this.updatedAt, this.deletedAt, this.subCategoriess,this.image});
 
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -37,9 +38,10 @@ class Category {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    image = json['imageurl'];
     if (json['sub_categories'] != null) {
-      subCategories = <SubCategories>[];
-      json['sub_categories'].forEach((v) { subCategories!.add(new SubCategories.fromJson(v)); });
+      subCategoriess = <SubCategoriess>[];
+      json['sub_categories'].forEach((v) { subCategoriess!.add(new SubCategoriess.fromJson(v)); });
     }
   }
 
@@ -51,14 +53,14 @@ class Category {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
-    if (this.subCategories != null) {
-      data['sub_categories'] = this.subCategories!.map((v) => v.toJson()).toList();
+    if (this.subCategoriess != null) {
+      data['sub_categories'] = this.subCategoriess!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class SubCategories {
+class SubCategoriess {
   int? id;
   String? name;
   String? arName;
@@ -67,9 +69,9 @@ class SubCategories {
   String? updatedAt;
   Null? deletedAt;
 
-  SubCategories({this.id, this.name, this.arName, this.categoryId, this.createdAt, this.updatedAt, this.deletedAt});
+  SubCategoriess({this.id, this.name, this.arName, this.categoryId, this.createdAt, this.updatedAt, this.deletedAt});
 
-  SubCategories.fromJson(Map<String, dynamic> json) {
+  SubCategoriess.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     arName = json['ar_name'];

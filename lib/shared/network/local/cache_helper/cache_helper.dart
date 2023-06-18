@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class CacheHelper{
-  static SharedPreferences? shardPrefrences;
-  static initShared()async{
-    shardPrefrences=await SharedPreferences.getInstance();
+  static SharedPreferences? sharedPreferences;
+
+  static initShared() async {
+    sharedPreferences = await SharedPreferences.getInstance();
   }
   static Future<bool> setData({
     required String key,
     required dynamic value,
   })async{
     if(value is String ) {
-      return await shardPrefrences!.setString(key, value);
+      return await sharedPreferences!.setString(key, value);
     }else if(value is bool ) {
-      return await shardPrefrences!.setBool(key, value);
+      return await sharedPreferences!.setBool(key, value);
     }else if(value is int ) {
-      return await shardPrefrences!.setInt(key, value);
+      return await sharedPreferences!.setInt(key, value);
     }
     else{
-      return await shardPrefrences!.setDouble(key, value);
+      return await sharedPreferences!.setDouble(key, value);
     }
   }
 
-  static  getData({
+  static Future<dynamic>  getData({
     required String key,
-  }){
-    return  shardPrefrences?.get(key);
-  }
+  })    async {
+    return await sharedPreferences!.get(key);}
   static  deleteData({
     required String key,
   }){
-    return  shardPrefrences?.remove(key);
+    return  sharedPreferences?.remove(key);
   }
 
 }

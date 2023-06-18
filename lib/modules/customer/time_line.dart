@@ -11,14 +11,14 @@ class TimeLine extends StatelessWidget {
   TimeLine({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ServicesBlocCustomer,StatesServicesCustomers>(
+    return BlocConsumer<ServicesBlocCustomer,ServicesStatesCustomer>(
         listener: (context,state){},
         builder: (context,state){
-
           List <TextEditingController> controllers=
           List.generate(10, (index) => TextEditingController());
           return Scaffold(
             appBar: AppBar(
+
               backgroundColor: Colors.white,
               elevation: 0.0,
               title: Text('Home',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
@@ -56,7 +56,6 @@ class TimeLine extends StatelessWidget {
       Padding(
           padding: const EdgeInsets.all(10),
           child: Container(
-
             child:
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +128,7 @@ class TimeLine extends StatelessWidget {
                         // print( SocialCubit.get(context).commentsNumber['${postId}']);
                       },),
 
-                      Text('5 }'),
+                      Text('5'),
 
 
                     ],

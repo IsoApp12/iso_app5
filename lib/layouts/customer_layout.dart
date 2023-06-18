@@ -10,7 +10,7 @@ class CustomerLayOut extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ServicesBlocCustomer,StatesServicesCustomers>(
+    return BlocConsumer<ServicesBlocCustomer,ServicesStatesCustomer>(
       listener: (context,states){},
       builder: (context,states){
         var cubit=ServicesBlocCustomer.get(context);
@@ -32,7 +32,7 @@ class CustomerLayOut extends StatelessWidget {
               },
 
             ),
-          ),
+              ),
         );
       },
     );

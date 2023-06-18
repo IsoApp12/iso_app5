@@ -8,19 +8,33 @@ import 'package:focused_menu_custom/focused_menu.dart';
 import 'package:focused_menu_custom/modals.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:iso_app_5/models/back_end/userlogin.dart';
+import 'package:iso_app_5/models/back_end/worker/userlogin.dart';
 import 'package:iso_app_5/models/back_end/worker/customer_register.dart';
+import 'package:iso_app_5/models/customer/CustomerView.dart';
+import 'package:iso_app_5/models/customer/user_login_customer.dart';
+import 'package:iso_app_5/models/usrLogin.dart';
 import 'package:iso_app_5/shared/network/global/dio_helper/DioClient.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/registration_states.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
 
-import '../../../../../models/back_end/userlogin.dart';
+import '../../../../../models/back_end/worker/userlogin.dart';
 
 class ServicesBlocRegistration extends Cubit<RegistrationStates> {
   ServicesBlocRegistration() : super(InitRegistration());
 
   static ServicesBlocRegistration get(context) => BlocProvider.of(context);
+  TextEditingController jobitle=TextEditingController();
+  TextEditingController jobDiscription=TextEditingController();
+  TextEditingController nameController=TextEditingController();
+  TextEditingController categoryController=TextEditingController();
+  TextEditingController accountTypeController=TextEditingController();
+  TextEditingController genderController=TextEditingController();
+  TextEditingController addressController=TextEditingController();
+  TextEditingController pricingController=TextEditingController();
+  TextEditingController jobExperience=TextEditingController();
+  PageController pageController=PageController();
+
   bool isLast = false;
   changeIsLast(){
     isLast=true;
@@ -31,7 +45,7 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     required String last_name,
     required String email,
     required String password,
-    required int phone,
+    required String phone,
 
   }){
     DioClient.post(path: 'provider/register',
@@ -57,7 +71,7 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     required String last_name,
     required String email,
     required String password,
-    required int phone,
+    required String phone,
 
   }){
     emit(CustomerRegisterLoading());
@@ -78,6 +92,8 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
       emit(CustomerRegisterError());
     });
   }
+
+
 
   verification(
   {
@@ -100,7 +116,9 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     });
   }
 
-  UserLogin? userLoginModel;
+  UserLoginModelWorker? userLoginModel;
+  UserLogin? userLoginn;
+  UserLoginCustomer? userLoginCustomer;
   void userLogin({
     required String email,
     required String password,
@@ -110,10 +128,21 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
       'email': email,
       'password': password,
     }).then((value) {
-      emit(UserLoginSuccess());
-      print(value.toString());
-      userLoginModel= UserLogin.fromJson( value.data());
-      print(userLoginModel!.provider!.token);
+      print(value.data);
+      userLoginn= UserLogin.fromJson( json: value.data);
+      print(userLoginn!.api_token);
+      emit(UserLoginSuccess(userLogin: userLoginn!));
+      if(userLoginn!.type==0){
+        userLoginCustomer=UserLoginCustomer.fromJson(value.data);
+        print(userLoginCustomer!.user!.firstName);
+        emit(UserLoginAssigningCustomer());
+      }else if(userLoginn!.type==1){
+        userLoginModel=UserLoginModelWorker.fromJson(value.data);
+        emit(UserLoginAssigningWorker());
+      }
+    emit(UserLoginAssigning());
+
+
     }).catchError((onError) {
       emit(UserLoginError());
       print('user login model${onError}');
@@ -127,23 +156,24 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     ImagePicker().pickImage(source: ImageSource.gallery).then((value) {
       imageFile = value as File?;
       emit(CameImagSuccess());
-    }).catchError((onError) {
+    })
+        .catchError((onError) {
       print(onError);
-    });
+             });
   }
 
   void workerSetUp({
     required String api_token,
-    required int city_id,
-    required int region_id,
-    required int category_id,
-    required int sub_category_id,
-    required int lat,
-    required int lng,
-    required String job_title,
-    required String job_description,
-    required String gender,
-    required String image,
+     int? city_id,
+     int? region_id,
+     int? category_id,
+     int? sub_category_id,
+     int? lat,
+     int? lng,
+     String? job_title,
+     String? job_description,
+     String? gender,
+     String? image,
   }) async {
     emit(WorkerSetUpLoading());
     DioClient.post(path: 'providers/update_profile', data: {
@@ -164,12 +194,15 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
       print('!!!!!!!!!!!!1${onError}');
     });
   }
- changeControllerText(TextEditingController controller ,String text,){
+
+   changeControllerText(TextEditingController controller ,String text,){
     controller.text=text;
     emit(ChangeControllerText());
  }
- String? address;
- getAddress(Position position)async{
+
+    String? address;
+
+   getAddress(Position position)async{
    Geocoder2.getDataFromCoordinates(
        latitude: position.latitude,
        longitude:position.longitude,
@@ -179,5 +212,44 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
 
  }
 
+  CustomerView? customerView;
+  getCustomerProfile(String tokens){
+    emit(GetProfileCustomerLoading());
+    DioClient.post(path: 'customers/profile',data: {'api_token':tokens} ).then((value)
+    {
+      customerView=CustomerView.fromJson(value.data);
+      print('حيت من البلوك${customerView!.firstName}');
+      emit(GetProfileCustomerSuccess());
+    }).catchError((onError){
+      print(onError);
+      emit(GetProfileCustomerError());
+    });
+  }
+  upDateCustomerProfile(String tokens){
+    emit(UpdateProfileCustomerLoading());
+    DioClient.post(path: 'update_profile', data: {})
+        .then((value) {
+      getCustomerProfile(tokens);
+      emit(UpdateProfileCustomerSuccess());
+    })
+        .catchError((onError){
+      emit(UpdateProfileCustomerError());
+    });
+  }
+
+  var ProfilePicker = ImagePicker();
+  File? profile;
+  Future<void> profilePicker() async {
+    emit(pickProfileLoading());
+    var pickedImage = await ProfilePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      profile = File(pickedImage!.path);
+      emit(pickProfileSuccess());
+
+    } else {
+      emit(pickProfileeError());
+      print('no image selected');
+    }
+  }
 
 }

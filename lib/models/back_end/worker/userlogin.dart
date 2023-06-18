@@ -1,37 +1,47 @@
-class UserLogin {
-  Provider? provider;
-  UserLogin.fromJson(Map<String, dynamic> json) {
-    provider = json['provider'] ;
+class UserLoginModelWorker {
+  User? user;
+  int? type;
+
+  UserLoginModelWorker({this.user, this.type});
+
+  UserLoginModelWorker.fromJson(Map<String, dynamic> json) {
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    type = json['type'];
   }
-   }
-class Provider{
+
+}
+
+class User {
   int? id;
   String? firstName;
   String? lastName;
   String? email;
   String? phone;
-  Null cityId;
-  Null regionId;
-  Null categoryId;
-  Null subCategoryId;
-  Null lat;
-  Null lng;
-  Null address;
-  Null image;
-  Null jobTitle;
-  Null jobDescription;
-  Null gender;
+  dynamic cityId;
+  dynamic regionId;
+  dynamic categoryId;
+  dynamic subCategoryId;
+  dynamic lat;
+  dynamic lng;
+  dynamic address;
+  dynamic image;
+  dynamic jobTitle;
+  dynamic jobDescription;
+  dynamic gender;
   String? active;
-  String? token;
+  String? apiToken;
+  String? code;
   String? createdAt;
   String? updatedAt;
-  Null deletedAt;
-  Null imageurl;
-  Null region;
-  Null city;
-  Null category;
-  Null subCategory;
-  Provider.fromJson(Map<String, dynamic> json) {
+  dynamic deletedAt;
+  dynamic imageurl;
+  dynamic region;
+  dynamic city;
+  dynamic category;
+  dynamic subCategory;
+
+
+  User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstName = json['first_name'];
     lastName = json['last_name'];
@@ -49,7 +59,8 @@ class Provider{
     jobDescription = json['job_description'];
     gender = json['gender'];
     active = json['active'];
-    token = json['token'];
+    apiToken = json['api_token'];
+    code = json['code'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
@@ -59,4 +70,6 @@ class Provider{
     category = json['category'];
     subCategory = json['sub_category'];
   }
+
+
 }

@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:focused_menu_custom/focused_menu.dart';
 import 'package:focused_menu_custom/modals.dart';
+import 'package:geocoder2/geocoder2.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:iso_app_5/models/back_end/userlogin.dart';
+import 'package:iso_app_5/models/back_end/worker/userlogin.dart';
 import 'package:iso_app_5/modules/worker/workerLayOutScreens/home.dart';
 import 'package:iso_app_5/modules/worker/workerLayOutScreens/orders.dart';
 import 'package:iso_app_5/modules/worker/workerLayOutScreens/profile.dart';
@@ -32,7 +35,7 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
     }
   }
 
-  List<Widget> screens = [Orders(),HomeWorker(),Profile()];
+  List<Widget> screens = [Orders(),HomeWorker(),ProfileWorkr()];
 
   int currentIndex = 0;
 
@@ -40,6 +43,62 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
    currentIndex = x;
    emit(ChangeNavBar());
   }
+  Future<void> enablePermission(context) async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if(permission ==LocationPermission.always){
+          emit(WorkerEnabledLoacationSuccess());
+          position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          print(position!.latitude);
+          WorkerCurrentCameraPosition( position!);
+          getAddress(position!);
+          emit(GetWorkerLocationSuccess());
+        }
+      } else if (permission == LocationPermission.always) {
+        emit(WorkerEnabledLoacationSuccess());
+        position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        print(position!.latitude);
+        WorkerCurrentCameraPosition( position!);
+        emit(GetWorkerLocationSuccess());
+      }
+    } catch (onError) {
+      print(onError);
+      emit(WorkerEnabledLoacationError());
+    }
+    ;
+  }
+  Position? position;
+
+  LatLng? latLng;
+  WorkerCurrentCameraPosition(Position position){
+
+    latLng= LatLng(position.latitude, position.longitude);
+    print('أنا جايلك من البوزيشن');
+    emit(ChangeLatLngWorkerSuccess());
 
 
+  }
+  String? address;
+
+  getAddress(Position position)async{
+    Geocoder2.getDataFromCoordinates(
+        latitude: position.latitude,
+        longitude:position.longitude,
+        googleMapApiKey: "AIzaSyCbXXQLWMo8mIdDAd_gh9daaeYKx0G-mCc").then((value) {
+      address=value.address;
+      emit(GetAddressWorkerSuccess());
+    }).catchError((onError)
+    {
+      print(onError);
+      emit(GetAddressWorkerError());
+
+    });
+
+
+  }
+  List<String>appBarTitels=['orders','home','profile'];
 }
