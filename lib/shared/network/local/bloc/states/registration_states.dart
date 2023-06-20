@@ -41,5 +41,13 @@ class GetProfileCustomerError extends RegistrationStates{}
 class UpdateProfileCustomerLoading extends RegistrationStates{}
 class UpdateProfileCustomerSuccess extends RegistrationStates{}
 class UpdateProfileCustomerError extends RegistrationStates{}
+class SetUpenabledPermissionSuccess extends RegistrationStates{}
+class GetsetupLocationSuccess extends RegistrationStates{}
+class SetUpenabledPermissionError extends RegistrationStates{}
+class getAdressSuccess extends RegistrationStates{}
+class getAdressError extends RegistrationStates{}
+class WorkerGetProfileInfoLoadingReg extends RegistrationStates{}
+class WorkerGetProfileInfoSuccessReg extends RegistrationStates{}
+class WorkerGetProfileInfoErrorReg extends RegistrationStates{}
 
 

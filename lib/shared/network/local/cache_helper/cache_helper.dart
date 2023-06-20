@@ -21,7 +21,6 @@ class CacheHelper{
       return await sharedPreferences!.setDouble(key, value);
     }
   }
-
   static Future<dynamic>  getData({
     required String key,
   })    async {

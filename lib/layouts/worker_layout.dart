@@ -1,11 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icon_broken/icon_broken.dart';
 import 'package:iso_app_5/modules/registration/set_up_account_provider.dart';
-import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_customer.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_worker.dart';
-import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
 class WorkerLatOut extends StatelessWidget {
   WorkerLatOut({Key? key}) : super(key: key);
@@ -16,7 +13,6 @@ class WorkerLatOut extends StatelessWidget {
       listener: (context,states){},
       builder: (context,states){
         var cubit=ServicesBlocWorker.get(context);
-
         return SafeArea(
           child: Scaffold(
             key: scaffoldKey,
@@ -72,9 +68,8 @@ class WorkerLatOut extends StatelessWidget {
               items: [
                 BottomNavigationBarItem(icon: Icon(IconBroken.Chart),label: 'Orders'),
                 BottomNavigationBarItem(icon: Icon(IconBroken.Home),label: 'Home'),
-
                 BottomNavigationBarItem(icon: Icon(IconBroken.Profile),label: 'profile'),
-              ],
+                      ],
               onTap: (int x){
                 cubit.changenavBar(x);
               },

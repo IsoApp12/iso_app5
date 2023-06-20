@@ -135,7 +135,7 @@ class Orders extends StatelessWidget {
                           ),
                         ),
                       ),
-                      OutlinedButton(onPressed: (){}, child: Text('cancel')),
+                      TextButton(onPressed: (){}, child: Text('accept')),
                     ],
                   ),
                 ],

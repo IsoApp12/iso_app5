@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icon_broken/icon_broken.dart';
+import 'package:iso_app_5/modules/worker/create_post.dart';
 import 'package:iso_app_5/shared/component/widgets/blocks.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_worker.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
@@ -36,41 +37,54 @@ class HomeWorker extends StatelessWidget {
                             )
                           ]
                       ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(height: 120,decoration: BoxDecoration(color: Colors.white,boxShadow:[BoxShadow(color: Colors.grey)]),),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      height: 80,
-                                     decoration: BoxDecoration(
-                                       color: Colors.grey[200],
-                                      borderRadius: BorderRadius.circular(20)
-                                     ),
-                                     child: Center(
-                                       child: TextField(
-                                         decoration: InputDecoration(
-                                           hintText: 'create post',
-                                           border: InputBorder.none,
-                                           contentPadding: EdgeInsetsDirectional.only(start: 20)
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Post()));
+
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(height: 120,decoration: BoxDecoration(color: Colors.white,boxShadow:[BoxShadow(color: Colors.grey)]),),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        height: 80,
+                                       decoration: BoxDecoration(
+                                         color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(20)
+                                       ),
+                                       child: Center(
+                                         child: GestureDetector(
+                                           onTap: (){
+                                             Navigator.push(context, MaterialPageRoute(builder: (context)=>Post()));
+
+                                           },
+                                           child: TextField(
+                                             enabled: false,
+                                             decoration: InputDecoration(
+                                               hintText: 'create post',
+                                               border: InputBorder.none,
+                                               contentPadding: EdgeInsetsDirectional.only(start: 20)
+                                             ),
+                                           ),
                                          ),
                                        ),
-                                     ),
+                                      ),
                                     ),
-                                  ),
-                                  MaterialButton(
-                                    padding: EdgeInsets.all(0.0),
-                                      onPressed: (){}, child: Icon(IconBroken.Send,color: Colors.blueGrey,))
-                                ],
+                                    MaterialButton(
+                                      padding: EdgeInsets.all(0.0),
+                                        onPressed: (){}, child: Icon(IconBroken.Send,color: Colors.blueGrey,))
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
