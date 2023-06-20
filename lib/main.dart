@@ -1,19 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iso_app_5/home.dart';
-import 'package:iso_app_5/layouts/customer_layout.dart';
-import 'package:iso_app_5/layouts/worker_layout.dart';
-import 'package:iso_app_5/modules/customer/home.dart';
-import 'package:iso_app_5/modules/customer/profile.dart';
-import 'package:iso_app_5/modules/registration/login.dart';
-import 'package:iso_app_5/modules/registration/set_up_account_customer.dart';
 import 'package:iso_app_5/modules/registration/set_up_account_provider.dart';
-import 'package:iso_app_5/modules/registration/sign_up.dart';
-import 'package:iso_app_5/modules/worker/workerLayOutScreens/home.dart';
-
-import 'package:iso_app_5/modules/worker/workerLayOutScreens/profile.dart';
 import 'package:iso_app_5/shared/component/constants.dart';
 import 'package:iso_app_5/shared/network/global/dio_helper/DioClient.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_customer.dart';
@@ -50,7 +38,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (BuildContext context)=>ServicesBlocCustomer()..getCategories()
         ),
         BlocProvider(create: (BuildContext context)=>ServicesBlocRegistration()),
-        BlocProvider(create: (BuildContext context)=>ServicesBlocWorker()),
+        BlocProvider(create: (BuildContext context)=>ServicesBlocWorker()..getProfileInfo()),
       ],
       child: BlocConsumer<ServicesBlocWorker,ServicesStatesWorker>(
         listener: (context,state){},
@@ -64,7 +52,7 @@ class MyApp extends StatelessWidget {
                 theme: ThemeData(
 
                 ),
-                home:  WorkerLatOut(),
+                home:  SetUpWorker(),
 
               );
             },

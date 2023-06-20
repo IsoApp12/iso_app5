@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icon_broken/icon_broken.dart';
+import 'package:iso_app_5/modules/registration/set_up_account_customer.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_customer.dart';
-import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_worker.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
-import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
 class CustomerLayOut extends StatelessWidget {
-  const CustomerLayOut({Key? key}) : super(key: key);
+   CustomerLayOut({Key? key}) : super(key: key);
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +16,51 @@ class CustomerLayOut extends StatelessWidget {
         var cubit=ServicesBlocCustomer.get(context);
         return SafeArea(
           child: Scaffold(
+            key: scaffoldKey,
+            drawer: Drawer(
+              child: Padding(
+                padding: const EdgeInsetsDirectional.only(top: 25,start: 10,),
+                child: Column(
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SetUpCustomer()));
+                      },
+                      child: Row(
+                        children: [
+                          Expanded(child: Text('Update profile data')),
+                          Spacer(),
+                          Icon(IconBroken.Setting)
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+
+            ),
+            appBar: AppBar(
+                actions: [
+                  IconButton(onPressed: (){}, icon: Icon(IconBroken.Message,color: Colors.blueGrey,)),
+                  IconButton(onPressed: (){}, icon: Icon(IconBroken.Notification,color: Colors.blueGrey,)),
+                ],
+                leading: MaterialButton(
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundImage:
+                    NetworkImage('https://th.bing.com/th/id/OIP.qyUk3-mfQGIGBUlcjKYJygHaG6?pid=ImgDet&rs=1'),
+                  ),
+                  onPressed: () {
+                    scaffoldKey.currentState!.openDrawer();
+                  },
+                ),
+                backgroundColor: Colors.white,
+                elevation: 0.0,
+                title: Text(
+                  '${cubit.appBarTitels[cubit.currentIndex]}',
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                )),
             body: cubit.screens[cubit.currentIndex],
             bottomNavigationBar: BottomNavigationBar(
               unselectedItemColor: Colors.black54,

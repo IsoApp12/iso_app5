@@ -9,4 +9,7 @@ class ChangeLatLngWorkerSuccess extends ServicesStatesWorker{}
 class ChangeLatLngWorkerError extends ServicesStatesWorker{}
 class GetAddressWorkerSuccess extends ServicesStatesWorker{}
 class GetAddressWorkerError extends ServicesStatesWorker{}
+class WorkerGetProfileInfoSuccess extends ServicesStatesWorker{}
+class WorkerGetProfileInfoError extends ServicesStatesWorker{}
+class WorkerGetProfileInfoLoading extends ServicesStatesWorker{}
 

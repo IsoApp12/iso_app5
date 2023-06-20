@@ -7,23 +7,20 @@ import 'package:geocoder2/geocoder2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:iso_app_5/models/back_end/worker/getProfile.dart';
 import 'package:iso_app_5/models/back_end/worker/userlogin.dart';
 import 'package:iso_app_5/modules/worker/workerLayOutScreens/home.dart';
 import 'package:iso_app_5/modules/worker/workerLayOutScreens/orders.dart';
 import 'package:iso_app_5/modules/worker/workerLayOutScreens/profile.dart';
+import 'package:iso_app_5/shared/component/constants.dart';
 import 'package:iso_app_5/shared/network/global/dio_helper/DioClient.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/registration_states.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
   ServicesBlocWorker() : super(InitialState());
-
   static ServicesBlocWorker get(context) => BlocProvider.of(context);
-
-
-
   Future<void> makePhoneCall(String phoneNumber) async {
     PermissionStatus permissionStatus = await Permission.phone.request();
     if (permissionStatus == PermissionStatus.granted) {
@@ -32,13 +29,9 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
     } else {
       // Permission not granted, show an error message
       throw Exception('Permission to make a phone call was not granted');
-    }
-  }
-
+    }}
   List<Widget> screens = [Orders(),HomeWorker(),ProfileWorkr()];
-
   int currentIndex = 0;
-
   changenavBar(int x) {
    currentIndex = x;
    emit(ChangeNavBar());
@@ -72,7 +65,6 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
     ;
   }
   Position? position;
-
   LatLng? latLng;
   WorkerCurrentCameraPosition(Position position){
 
@@ -83,7 +75,7 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
 
   }
   String? address;
-
+  ProfileInfo? profileInfo;
   getAddress(Position position)async{
     Geocoder2.getDataFromCoordinates(
         latitude: position.latitude,
@@ -100,5 +92,17 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
 
 
   }
-  List<String>appBarTitels=['orders','home','profile'];
+  List<String>appBarTitels=['profile','orders','profile'];
+  void getProfileInfo(){
+    emit(WorkerGetProfileInfoLoading());
+    DioClient.post(path: 'providers/profile', data: {'api_token':token},)
+        .then((value) {
+    profileInfo=ProfileInfo.fromJson(json: value.data);
+      emit(WorkerGetProfileInfoSuccess());
+
+    }).catchError((onError){
+      print(onError);
+      emit(WorkerGetProfileInfoError());
+    });
+  }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:focused_menu_custom/modals.dart';
+import 'package:iso_app_5/shared/component/constants.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/registration_bloc.dart';
+import 'package:iso_app_5/shared/network/local/cache_helper/cache_helper.dart';
 Widget formField({
   required String labelText,
   required TextEditingController controller,
@@ -97,9 +99,13 @@ Widget LoginRegisterButton(
       ),
     );
 
-   FocusedMenuItem focusedMenuItem({required TextEditingController controller ,required String text,required IconData icon,required context})=>  FocusedMenuItem(
-       onPressed: (){
+   FocusedMenuItem focusedMenuItem({required TextEditingController controller  ,required String text,required IconData icon,required context,required int id})=>  FocusedMenuItem(
+       onPressed: ()async{
          controller.text=text;
+         CacheHelper.setData(key: 'categoryId', value: id).then((value) async{
+           categoryId=await CacheHelper.getData(key: 'categoryId');
+         });
+
        },
        title: Text('${text}'),
        trailingIcon: Icon(

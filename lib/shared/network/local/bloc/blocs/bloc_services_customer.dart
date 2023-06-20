@@ -19,18 +19,11 @@ import 'package:iso_app_5/shared/network/local/bloc/states/registration_states.d
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iso_app_5/shared/network/local/cache_helper/cache_helper.dart';
-
-
-
 class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
   ServicesBlocCustomer() : super(InitialStateCustomer());
-
   static ServicesBlocCustomer get(context) => BlocProvider.of(context);
-
   List<Widget> screens = [HomeCustomer(),Categories(),TimeLine(),ProfileCustomr()];
-
   int currentIndex = 0;
-
   changenavBar(int x)async {
     currentIndex = x;
     if(x==3){
@@ -40,7 +33,6 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
     }
     emit(ChangeNavBarCustomer());
   }
-
  Future<void> enablePermission(context) async {
     try {
       LocationPermission permission = await Geolocator.checkPermission();
@@ -69,7 +61,6 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
     }
     ;
   }
-
   CustomerCurrentCameraPosition(Position position){
 
      latLng= LatLng(position.latitude, position.longitude);
@@ -89,7 +80,7 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
   DioClient.getData(url: 'categories')
       .then((value) {
      catItem= Categoriess.fromJson(value.data);
-     print(catItem!.categories![1]);
+     print(catItem!.categories![1].name);
     emit(GetCategoriesCustomerSuccess());
   })
       .catchError((onError){
@@ -114,6 +105,7 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
 
 
 }
+  List<String>appBarTitels=['home','categories','timline','profile'];
   customerRegister({
     required String api_token,
   }){

@@ -18,10 +18,9 @@ class ProfileWorkr extends StatelessWidget {
       listener: (context,states){
       },
       builder: (context,states){
+        var cubit=ServicesBlocWorker.get(context);
         return SafeArea(
           child: Scaffold(
-
-
            body: Padding(
              padding: const EdgeInsets.all(8.0),
              child: Container(
@@ -55,7 +54,7 @@ class ProfileWorkr extends StatelessWidget {
                            child:Image(
                              fit: BoxFit.cover,
                              image:
-                             NetworkImage('https://th.bing.com/th/id/OIP.qyUk3-mfQGIGBUlcjKYJygHaG6?pid=ImgDet&rs=1')
+                             NetworkImage('${cubit.profileInfo!.provider!.imageurl}')
                          )),
                          SizedBox(width: 10,),
                          Container(height: 200,width: 1,color: Colors.grey,),
@@ -64,18 +63,18 @@ class ProfileWorkr extends StatelessWidget {
                            child: Column(
                              crossAxisAlignment: CrossAxisAlignment.start,
                              children: [
-                               Text('hend shoep',overflow: TextOverflow.ellipsis,style: TextStyle(
+                               Text('${cubit.profileInfo!.provider!.first_name}${cubit.profileInfo!.provider!.last_name}',overflow: TextOverflow.ellipsis,style: TextStyle(
                                  fontSize: 18.0,
                                  fontWeight: FontWeight.bold,
                                ),),
                                SizedBox(height: 10,),
                                Expanded(
-                                 child: Text('hendshoep@gmail.com',overflow: TextOverflow.ellipsis, style: TextStyle(
+                                 child: Text('${cubit.profileInfo!.provider!.email}',overflow: TextOverflow.ellipsis, style: TextStyle(
                                    fontSize: 14.0,
                                    color: Colors.grey[600],
                                  ),),),
                                Expanded(
-                                 child: Text('this is the job desription',overflow: TextOverflow.ellipsis, style: TextStyle(
+                                 child: Text('${cubit.profileInfo!.provider!.job_description}',overflow: TextOverflow.ellipsis, style: TextStyle(
                                    fontSize: 16.0,
                                    color: Colors.grey[600],
                                  ),),
@@ -135,13 +134,13 @@ class ProfileWorkr extends StatelessWidget {
                        (
                        crossAxisAlignment: CrossAxisAlignment.start,
                        children: [
-                         Text('job title',overflow: TextOverflow.ellipsis,style: TextStyle(
+                         Text('${cubit.profileInfo!.provider!.job_title}',overflow: TextOverflow.ellipsis,style: TextStyle(
                            fontSize: 18.0,
                            fontWeight: FontWeight.bold,
                          ),),
                          SizedBox(height: 10,),
                          Expanded(
-                           child: Text('job exprience',overflow: TextOverflow.ellipsis, style: TextStyle(
+                           child: Text('${cubit.profileInfo!.provider!.job_description}',overflow: TextOverflow.ellipsis, style: TextStyle(
                              fontSize: 14.0,
                              color: Colors.grey[600],
                            ),),
@@ -154,11 +153,11 @@ class ProfileWorkr extends StatelessWidget {
                        OutlinedButton(onPressed: ()async{
 
 
-                         }, child:Text('01013114929') ),
+                         }, child:Text('${cubit.profileInfo!.provider!.phone}') ),
                       SizedBox(width: 30,),
                        InkWell(
                          onTap: (){
-                           launch("tel://01013114929");
+                           launch("tel://${cubit.profileInfo!.provider!.phone}");
                          },
                          child: Text('save contact',style: TextStyle(color: Colors.blueGrey[600]),),
                        )
@@ -168,7 +167,7 @@ class ProfileWorkr extends StatelessWidget {
                    Row(
                      mainAxisAlignment: MainAxisAlignment.start,
                      children: [
-                     Expanded(child: Text('address',style: TextStyle(color: Colors.black),overflow: TextOverflow.ellipsis,maxLines: 2,)),
+                     Expanded(child: Text('${cubit.profileInfo!.provider!.address}',style: TextStyle(color: Colors.black),overflow: TextOverflow.ellipsis,maxLines: 2,)),
                      SizedBox(width: 30,),
                      Icon(IconBroken.Location,color: Colors.blueGrey,)
                    ],),

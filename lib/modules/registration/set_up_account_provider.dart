@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:focused_menu_custom/focused_menu.dart';
@@ -27,11 +29,14 @@ class _SetUpWorkerState extends State<SetUpWorker> {
 
 
     return BlocConsumer<ServicesBlocRegistration,RegistrationStates>(
-      listener: (context,state){},
+      listener: (context,state){
+        if(state is WorkerSetUpSuccess) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => WorkerLatOut()));
+        }
+      },
       builder: (context,state){
         var cubit=ServicesBlocRegistration.get(context);
         return Scaffold(
-
           backgroundColor: Colors.grey[300],
           body: Column(
             children: [
@@ -183,12 +188,12 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                             color: Colors.black,
                                           ),
                                           menuItems: [
-                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:IconBroken.Work,text:'crafts'),
-                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:Icons.local_pharmacy_rounded,text:'medical'),
-                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:IconBroken.Danger,text:'electrical'),
-                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:Icons.account_balance_sharp,text:'Lawyers'),
-                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:Icons.laptop,text:'programmer'),
-                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:Icons.handyman,text:'crafts'),
+                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:IconBroken.Work,text:'crafts',id: 4),
+                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:Icons.local_pharmacy_rounded,text:'medical',id: 3),
+                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:IconBroken.Danger,text:'electrical',id:8),
+                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:Icons.account_balance_sharp,text:'Lawyers',id: 10),
+                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:Icons.laptop,text:'programmer',id: 7),
+
                                           ],
                                         ),
                                         border: InputBorder.none,
@@ -218,8 +223,8 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                             color: Colors.black,
                                           ),
                                           menuItems: [
-                                            focusedMenuItem(controller:cubit. genderController, text: 'male', icon: Icons.male, context: context),
-                                            focusedMenuItem(controller: cubit.genderController, text: 'female', icon: Icons.female_outlined, context: context),
+                                            focusedMenuItem(controller:cubit. genderController, text: 'male', icon: Icons.male, context: context,id: 1),
+                                            focusedMenuItem(controller: cubit.genderController, text: 'female', icon: Icons.female_outlined, context: context,id: 2),
                                           ],
                                         ),
                                         border: InputBorder.none,
@@ -245,7 +250,14 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                             IconBroken.Location,
                                             color: Colors.greenAccent,
                                           ),
-                                          onPressed: () {},
+                                          onPressed: ()async {
+                                          cubit.getPosition(context).then((value) {
+                                           if(cubit.address!=null){
+                                             cubit.addressController.text=cubit.address!;
+                                           }
+                                          });
+
+                                          },
                                         ),
                                         border: InputBorder.none,
                                         hintText: 'location',
@@ -274,8 +286,8 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                             color: Colors.black,
                                           ),
                                           menuItems: [
-                                            focusedMenuItem(controller:cubit. accountTypeController, text: 'company', icon: IconBroken.User1, context: context),
-                                            focusedMenuItem(controller:cubit. accountTypeController, text: 'self_employed', icon: Icons.person_2_outlined, context: context),
+                                            focusedMenuItem(controller:cubit. accountTypeController, text: 'company', icon: IconBroken.User1, context: context,id: 1),
+                                            focusedMenuItem(controller:cubit. accountTypeController, text: 'self_employed', icon: Icons.person_2_outlined, context: context,id:2),
 
                                           ],
                                         ),
@@ -303,11 +315,11 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                           child: Icon(IconBroken.Arrow___Down_2,color: Colors.black,),
                                           onPressed: () {},
                                           menuItems: [
-                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 1k', icon: Icons.monetization_on_outlined, context: context),
-                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 5k', icon: Icons.monetization_on_outlined, context: context),
-                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 10k', icon: Icons.monetization_on_outlined, context: context),
-                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 50k', icon: Icons.monetization_on_outlined, context: context),
-                                            focusedMenuItem(controller:cubit. pricingController, text: 'more', icon: Icons.monetization_on_outlined, context: context),
+                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 1k', icon: Icons.monetization_on_outlined, context: context,id: 1),
+                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 5k', icon: Icons.monetization_on_outlined, context: context,id: 2),
+                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 10k', icon: Icons.monetization_on_outlined, context: context,id: 3),
+                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 50k', icon: Icons.monetization_on_outlined, context: context,id:4),
+                                            focusedMenuItem(controller:cubit. pricingController, text: 'more', icon: Icons.monetization_on_outlined, context: context,id:5),
 
                                           ],
                                         ),
@@ -355,7 +367,16 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                         if(cubit.isLast){
                          CacheHelper.setData(key: 'setupDone', value: true)
                              .then((value) async{
-                     //      cubit.workerSetUp(api_token: token!,  category_id: category_id, sub_category_id: sub_category_id, lat: lat, lng: lng, job_title: job_title, job_description: job_description, gender: gender, image: image)
+                        cubit.workerSetUp(
+                            api_token: token!,
+                            category_id: categoryId != null? categoryId:null,
+                            lat: cubit.position!= null?cubit.position!.latitude:null,
+                            lng: cubit.position!= null?cubit.position!.longitude:null,
+                            job_title: cubit.jobitle.text!=null?cubit.jobitle.text:null,
+                            job_description: cubit.jobDiscription.text!=null?cubit.jobDiscription.text:null,
+                            gender:cubit.genderController.text != null ?cubit.genderController.text:null,
+                            image:cubit.formData !=null?cubit.formData:null
+                        );
                           print(await CacheHelper.getData(key: 'token'));
 
                          });
