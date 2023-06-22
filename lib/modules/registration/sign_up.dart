@@ -22,17 +22,16 @@ class SignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ServicesBlocRegistration,RegistrationStates>(
       listener:(context,states){
-      //   if(states is WorkerRegisterSuccess) {
-      //     CacheHelper.setData(key: 'accountType', value: 0).then((value)async {
-      //       Navigator.push(context, MaterialPageRoute(builder: (context)=>Verify(type: CacheHelper.getData(key: 'accountType') ,email: emailController.text,))) ;
-      //     });
-      //     if(states is CustomerRegisterSuccess) {
-      //       CacheHelper.setData(key: 'accountType', value: 1).then((value) {
-      //         Navigator.push(context, MaterialPageRoute(builder: (context)=>Verify(type:  CacheHelper.getData(key: 'accountType'),email: emailController.text,))) ;
-      //       });
-      //
-      //   }
-      // }
+        if(states is WorkerRegisterSuccess) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>
+              Verify(type: states.type, email: emailController.text,)));
+        }
+        else  if(states is CustomerRegisterSuccess) {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>Verify(type:states.type  ,email: emailController.text,))) ;
+
+
+          }
+      
         },
 
       builder:(context,states){

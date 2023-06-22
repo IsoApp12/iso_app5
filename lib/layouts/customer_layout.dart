@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icon_broken/icon_broken.dart';
 import 'package:iso_app_5/modules/registration/set_up_account_customer.dart';
+import 'package:iso_app_5/shared/component/constants.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_customer.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
 class CustomerLayOut extends StatelessWidget {
@@ -46,9 +49,9 @@ class CustomerLayOut extends StatelessWidget {
                 ],
                 leading: MaterialButton(
                   child: CircleAvatar(
-                    radius: 20,
+                    radius: 30,
                     backgroundImage:
-                    NetworkImage('https://th.bing.com/th/id/OIP.qyUk3-mfQGIGBUlcjKYJygHaG6?pid=ImgDet&rs=1'),
+                    FileImage(File(customerProfile!) )as ImageProvider,
                   ),
                   onPressed: () {
                     scaffoldKey.currentState!.openDrawer();

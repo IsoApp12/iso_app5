@@ -9,8 +9,8 @@ import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_worker.d
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({Key? key}) : super(key: key);
-
+   SearchScreen({Key? key}) : super(key: key);
+TextEditingController addressController=TextEditingController();
   @override
   Widget build(BuildContext context) {
     Set <Marker>getMarkers(){
@@ -51,18 +51,29 @@ class SearchScreen extends StatelessWidget {
         var cubit=ServicesBlocCustomer.get(context);
         return Scaffold(
           body:   ConditionalBuilder(
-            builder:(context)=>GoogleMap(
-              markers: getMarkers(),
-              initialCameraPosition: CameraPosition(
+            builder:(context)=>Stack(
+              children: [
+                GoogleMap(
+                  markers: getMarkers(),
+                  initialCameraPosition: CameraPosition(
 
-                  target: cubit.latLng!,zoom: 15),
-              onMapCreated: (GoogleMapController controller) {
-                _controller=controller;
-                setMapStyle();
+                      target: cubit.latLng!,zoom: 15),
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller=controller;
+                    setMapStyle();
 
 
-              },
+                  },
 
+                ),
+                Positioned(child: TextFormField(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: InputBorder.none
+                  ),
+                ))
+              ],
             ) ,
             fallback:(context)=>Center(child: TextButton(child:Text('open your location'),onPressed: (){
               ServicesBlocCustomer.get(context).enablePermission(context);

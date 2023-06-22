@@ -9,6 +9,7 @@ import 'package:focused_menu_custom/modals.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:iso_app_5/models/back_end/worker/getProfile.dart';
+import 'package:iso_app_5/models/back_end/worker/register.dart';
 import 'package:iso_app_5/models/back_end/worker/userlogin.dart';
 import 'package:iso_app_5/models/back_end/worker/customer_register.dart';
 import 'package:iso_app_5/models/customer/CustomerView.dart';
@@ -60,14 +61,15 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
         })
         .then((value) {
           print(value.data);
-      emit(WorkerRegisterSuccess());
+          register=Register.fromJson(Json: value.data);
+      emit(WorkerRegisterSuccess(0));
     }).catchError((onError){
       print(onError);
       emit(WorkerRegisterError());
     });
   }
 
-  CustomerRegister? customerRegisterModel;
+Register? register;
   customerRegister({
     required String first_name,
     required String last_name,
@@ -87,8 +89,8 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
         })
         .then((value) {
           print(value.data);
-          //customerRegisterModel=CustomerRegister.fromJson(json: value.data.);
-      emit(CustomerRegisterSuccess());
+          register=Register.fromJson(Json: value.data);
+      emit(CustomerRegisterSuccess(1));
     }).catchError((onError){
       print(onError);
       emit(CustomerRegisterError());
@@ -142,7 +144,7 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
         emit(UserLoginAssigningWorker());
         getProfileInfo();
       }
-    emit(UserLoginAssigning());
+    emit(UserLoginSuccess(userLogin: userLoginn!));
 
 
     }).catchError((onError) {
@@ -160,7 +162,6 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
           emit(SetUpenabledPermissionSuccess());
           position = await Geolocator.getCurrentPosition(
               desiredAccuracy: LocationAccuracy.high);
-          print(position!.latitude);
           getAddress(position!);
           emit(GetsetupLocationSuccess());
         }
@@ -168,7 +169,6 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
         emit(SetUpenabledPermissionSuccess());
         position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
-        print(position!.latitude);
         getAddress(position!);
         emit(GetsetupLocationSuccess());
       }
@@ -178,17 +178,17 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     }
     ;
   }
-  File? imageFile;
-  getImageFromGallry() async {
-    emit(CameImageLoading());
-    ImagePicker().pickImage(source: ImageSource.gallery).then((value) {
-      imageFile = value as File?;
-      emit(CameImagSuccess());
-    })
-        .catchError((onError) {
-      print(onError);
-             });
-  }
+  // File? imageFile;
+  // getImageFromGallry() async {
+  //   emit(CameImageLoading());
+  //   ImagePicker().pickImage(source: ImageSource.gallery).then((value) {
+  //     imageFile = value as File?;
+  //     emit(CameImagSuccess());
+  //   })
+  //       .catchError((onError) {
+  //     print(onError);
+  //            });
+  // }
   void workerSetUp({
     required String api_token,
      int? city_id,
@@ -220,7 +220,7 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
       getProfileInfo();
     }).catchError((onError) {
       emit(WorkerSetUpError());
-      print('!!!!!!!!!!!!1${onError}');
+      print('!!!!!!!!!!!!${onError}');
     });
   }
   ProfileInfo? profileInfo;
@@ -247,7 +247,8 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
        latitude: position.latitude,
        longitude:position.longitude,
        googleMapApiKey: "AIzaSyCbXXQLWMo8mIdDAd_gh9daaeYKx0G-mCc").then((value) {
-         address=value.address;
+         address=value .address;
+         addressController.text=value .address;
          emit(getAdressSuccess());
    }).catchError((onError){
      print(onError);
@@ -256,29 +257,6 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
 
  }
   CustomerView? customerView;
-  getCustomerProfile(String tokens){
-    emit(GetProfileCustomerLoading());
-    DioClient.post(path: 'customers/profile',data: {'api_token':tokens} ).then((value)
-    {
-      customerView=CustomerView.fromJson(value.data);
-      print('حيت من البلوك${customerView!.firstName}');
-      emit(GetProfileCustomerSuccess());
-    }).catchError((onError){
-      print(onError);
-      emit(GetProfileCustomerError());
-    });
-  }
-  upDateCustomerProfile(String tokens){
-    emit(UpdateProfileCustomerLoading());
-    DioClient.post(path: 'update_profile', data: {})
-        .then((value) {
-      getCustomerProfile(tokens);
-      emit(UpdateProfileCustomerSuccess());
-    })
-        .catchError((onError){
-      emit(UpdateProfileCustomerError());
-    });
-  }
   var ProfilePicker = ImagePicker();
   File? profile;
   var pickedImage;
@@ -287,7 +265,9 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     pickedImage = await ProfilePicker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       profile = File(pickedImage!.path);
-      uploadImage(profile!);
+      uploadImage(profile!).catchError((onError){
+        print(onError);
+      });
       emit(pickProfileSuccess());
 
     } else {
@@ -296,10 +276,14 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     }
   }
   FormData? formData;
-  Future<void> uploadImage(File file) async {
-    String filename=file.path.split('/').last;
-     formData = FormData.fromMap({
-      'file': await MultipartFile.fromFile(file.path, filename: filename),
-    });
+  Future<void> uploadImage(File image) async {
+    String filename=image.path.split('/').last;
+    formData!.files.add(MapEntry(
+      'photo',
+      await MultipartFile.fromFile(
+        image!.path,
+        filename: image!.path.split('/').last,
+      ),
+    ));
   }
 }

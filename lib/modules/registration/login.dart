@@ -4,6 +4,7 @@ import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:iconly/iconly.dart';
 import 'package:iso_app_5/layouts/customer_layout.dart';
 import 'package:iso_app_5/layouts/worker_layout.dart';
+import 'package:iso_app_5/modules/registration/set_up_account_customer.dart';
 import 'package:iso_app_5/modules/registration/set_up_account_provider.dart';
 import 'package:iso_app_5/modules/registration/sign_up.dart';
 import 'package:iso_app_5/modules/registration/verify.dart';
@@ -29,7 +30,7 @@ class LoginScreen extends StatelessWidget {
        if( states.userLogin.type==0){
 
         CacheHelper.setData(key: 'token', value: '${states.userLogin.api_token}').then((value) {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerLayOut()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>SetUpCustomer()));
         });
        }else  if( states.userLogin.type==1){
          CacheHelper.setData(key: 'token', value: '${states.userLogin.api_token}')
