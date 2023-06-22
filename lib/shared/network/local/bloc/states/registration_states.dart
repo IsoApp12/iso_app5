@@ -4,7 +4,10 @@ import 'package:iso_app_5/models/usrLogin.dart';
 abstract class RegistrationStates{}
 class InitRegistration extends RegistrationStates{}
 class WorkerRegisterLoading extends RegistrationStates{}
-class WorkerRegisterSuccess extends RegistrationStates{}
+class WorkerRegisterSuccess extends RegistrationStates{
+  int type;
+  WorkerRegisterSuccess(this.type);
+}
 class WorkerRegisterError extends RegistrationStates{}
 class UserLoginLoading extends RegistrationStates{}
 class UserLoginSuccess extends RegistrationStates{
@@ -17,8 +20,13 @@ class UserLoginAssigningWorker extends RegistrationStates{}
 class UserLoginAssigningCustomer extends RegistrationStates{}
 
 class CustomerRegisterError extends RegistrationStates{}
-class CustomerRegisterLoading extends RegistrationStates{}
-class CustomerRegisterSuccess extends RegistrationStates{}
+class CustomerRegisterLoading extends RegistrationStates{
+
+}
+class CustomerRegisterSuccess extends RegistrationStates{
+  int type;
+  CustomerRegisterSuccess(this.type);
+}
 class WorkerSetUpLoading extends RegistrationStates{}
 class WorkerSetUpSuccess extends RegistrationStates{}
 class WorkerSetUpError extends RegistrationStates{}

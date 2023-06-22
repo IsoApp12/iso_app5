@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:iso_app_5/models/back_end/categories.dart';
 import 'package:iso_app_5/models/customer/CustomerView.dart';
 import 'package:iso_app_5/modules/customer/categories.dart';
@@ -22,7 +26,10 @@ import 'package:iso_app_5/shared/network/local/cache_helper/cache_helper.dart';
 class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
   ServicesBlocCustomer() : super(InitialStateCustomer());
   static ServicesBlocCustomer get(context) => BlocProvider.of(context);
+
   List<Widget> screens = [HomeCustomer(),Categories(),TimeLine(),ProfileCustomr()];
+  TextEditingController addressController=TextEditingController();
+
   int currentIndex = 0;
   changenavBar(int x)async {
     currentIndex = x;
@@ -53,6 +60,7 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
             desiredAccuracy: LocationAccuracy.high);
         print(position!.latitude);
         CustomerCurrentCameraPosition( position!);
+        getAddress(position!);
         emit(GetCustomerLocationSuccess());
       }
     } catch (onError) {
@@ -64,9 +72,7 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
   CustomerCurrentCameraPosition(Position position){
 
      latLng= LatLng(position.latitude, position.longitude);
-     print('أنا جايلك من البوزيشن');
-     print('${latLng!.longitude}');
-     print('${latLng!.latitude}');
+
      emit(ChangeLatLngSuccess());
 
 
@@ -80,7 +86,6 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
   DioClient.getData(url: 'categories')
       .then((value) {
      catItem= Categoriess.fromJson(value.data);
-     print(catItem!.categories![1].name);
     emit(GetCategoriesCustomerSuccess());
   })
       .catchError((onError){
@@ -92,9 +97,11 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
     Geocoder2.getDataFromCoordinates(
         latitude: position.latitude,
         longitude:position.longitude,
-        googleMapApiKey: "AIzaSyCbXXQLWMo8mIdDAd_gh9daaeYKx0G-mCc").then((value) {
+        googleMapApiKey: "AIzaSyCbXXQLWMo8mIdDAd_gh9daaeYKx0G-mCc")
+        .then((value) {
       address=value.address;
-      print(address);
+      addressController.text=value.address;
+
       emit(GetAddressSuccess());
     }).catchError((onError)
     {
@@ -106,25 +113,84 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
 
 }
   List<String>appBarTitels=['home','categories','timline','profile'];
-  customerRegister({
-    required String api_token,
-  }){
-    emit(LogOutLoading());
-    DioClient.post(path: 'logout',
-        data: {
-          'api_token':token,},
 
-     )
-        .then((value) {
-      print(value.data);
-      //customerRegisterModel=CustomerRegister.fromJson(json: value.data.);
-      emit(LogOutSuccess());
-    }).catchError((onError){
-      print(onError);
-      emit(LogOutError());
+  var ProfilePicker = ImagePicker();
+  File? profile;
+  var pickedImage;
+  Future<void> profilePickerCustomer() async {
+    emit(gerImageFromGalleryLoading());
+    pickedImage = await ProfilePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      profile =  File(pickedImage!.path);
+      CacheHelper.setData(key: 'profile',value: '${pickedImage!.path}').then((value) {
+
+        print('cached image suucessfully');
+        emit(gerImageFromGallerySuccess());
+      });
+
+
+
+    } else {
+      emit(gerImageFromGalleryError());
+      print('no image selected');
+    }
+  }
+  // FormData? formData;
+  // Future<void> uploadImage(File image, double? lat, double? lng, String? gender) async {
+  // try  {
+  //
+  //     String filename = image.path.split('/').last;
+  //       formData = FormData.fromMap({
+  //         'api_token':token,
+  //         'lat':lat,
+  //         'lng':lng,
+  //         'gender':gender,
+  //        'photo': await MultipartFile.fromFile(image!.path,
+  //            filename: image!.path.split('/').last),
+  //      });
+  //
+  //   }catch (onError){
+  //  print(onError);
+  // }
+  // }
+  
+  void upDateProfile({required String token,required double lat, required double lng, required String gender})async{
+    emit(SetUpCustomerLoading());
+    customerProfile=await CacheHelper.getData(key: 'profile');
+    DioClient.post(path: 'customers/update_profile', data: {
+      'api_token':token,
+      'lat':lat,
+      'lng':lng,
+      'gender':gender,
+
+    })
+   .then((value) {
+     print(value.data);
+     getCustomer();
+      emit(SetUpCustomerSuccess());
+
+    })
+   .catchError((onError){
+     print(onError);
+      emit(SetUpCustomerError());
     });
   }
 
+  CustomerView? customerView;
+ void getCustomer(){
+    emit(getCustomerLoading());
+    DioClient.post(path: 'customers/profile', data: {'api_token':token})
+        .then((value) {
+          customerView=CustomerView.fromJson(json:value.data);
+          print(value.data);
+          print('${customerView!.customer!.email}7777777777777');
+          emit(getCustomerSuccess());
+    })
+        .catchError((onError){
+          print(onError);
+          emit(getCustomerError());
+    });
+  }
 
 
 }

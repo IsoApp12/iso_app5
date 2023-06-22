@@ -1,16 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:focused_menu_custom/focused_menu.dart';
 import 'package:icon_broken/icon_broken.dart';
 import 'package:iso_app_5/shared/component/constants.dart';
-import 'package:iso_app_5/shared/network/global/dio_helper/DioClient.dart';
+import 'package:iso_app_5/shared/component/widgets/widget.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_customer.dart';
-import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_worker.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/registration_bloc.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/registration_states.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
-import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
-import 'package:iso_app_5/shared/network/local/cache_helper/cache_helper.dart';
+
 
 class ProfileCustomr extends StatelessWidget {
   ProfileCustomr({Key? key}) : super(key: key);
@@ -18,41 +18,22 @@ class ProfileCustomr extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController genderController=TextEditingController();
+    TextEditingController phoneNumber=TextEditingController();
 
-    return BlocConsumer<ServicesBlocRegistration, RegistrationStates>(
+    return BlocConsumer<ServicesBlocCustomer, ServicesStatesCustomer>(
       listener: (context, states) {
 
       },
       builder: (context, states) {
 
-        var cubit = ServicesBlocRegistration.get(context);
+
+        var cubit = ServicesBlocCustomer.get(context);
+        phoneNumber.text=cubit.customerView!.customer!.phone!;
+        genderController.text=cubit.customerView!.customer!.gender!;
         return SafeArea(
           child: Scaffold(
-            appBar: AppBar(
-              actions: [
-                IconButton(onPressed: (){}, icon: Icon(IconBroken.Message,color: Colors.blueGrey,)),
-                IconButton(onPressed: (){}, icon: Icon(IconBroken.Notification,color: Colors.blueGrey,)),
-                MaterialButton(onPressed: (){}, child: Text('Update',style: TextStyle(color: Colors.blueGrey),)),
-              ],
-                leading: MaterialButton(
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundImage:
 
-                    NetworkImage(
-                        'https://th.bing.com/th/id/OIP.qyUk3-mfQGIGBUlcjKYJygHaG6?pid=ImgDet&rs=1'),
-                  ),
-                  onPressed: () {
-
-                  },
-                ),
-                backgroundColor: Colors.white,
-                elevation: 0.0,
-                title: Text(
-                  'Profile',
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
-                )),
             body: Padding(
               padding: const EdgeInsets.all(50),
               child: Container(
@@ -86,32 +67,28 @@ class ProfileCustomr extends StatelessWidget {
                           CircleAvatar(
                             radius: 75,
                             backgroundImage:
-                            cubit.customerView!.imageurl!=null?
-                            NetworkImage(
-                                '${cubit.customerView!.imageurl}')
-                                :
-                            NetworkImage(
-                                'https://th.bing.com/th/id/OIP.qyUk3-mfQGIGBUlcjKYJygHaG6?pid=ImgDet&rs=1'),
-                          ),
+
+                            FileImage(File(customerProfile!) )as ImageProvider
+                          )
 
                         ],
                       ),
                     ),
-                    SizedBox(height: 5.0),
+                    SizedBox(height: 15.0),
                     Align(
                       alignment: AlignmentDirectional.topCenter,
                       child: Column(
                         children: [
                           Text(
-                            '${cubit.customerView!.firstName}${cubit.customerView!.lastName}',
+                            '${cubit.customerView!.customer!.firstName} ${cubit.customerView!.customer!.lastName}',
                             style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 5.0),
+                          SizedBox(height: 10.0),
                           Text(
-                            '${cubit.customerView!.email}',
+                            '${cubit.customerView!.customer!.email}',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 3,
                             style: TextStyle(
@@ -120,74 +97,70 @@ class ProfileCustomr extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            height: 30,
+                            height: 10,
                           ),
-                          OutlinedButton(
-                            onPressed: () {},
-                            child: Container(
-                              clipBehavior: Clip.antiAlias,
-                              child: Row(
-                                children: [
-                                  Center(
-                                      child: Text(
-                                    'Messeege',
-                                    style: TextStyle(color: Colors.blueGrey),
-                                  )),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Icon(
-                                    IconBroken.Message,
-                                    color: Colors.blueGrey,
-                                  )
-                                ],
-                              ),
-                              height: 45,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(1),
+                          Container(
+                            padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
+                            width: 330,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(10)),
+
+                            height: 45,
+                            child: TextFormField(
+                              controller:cubit.addressController,
+                              decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                    onPressed: (){},
+                                  icon: Icon(IconBroken.Location),
+                                ),
+                                border: InputBorder.none,
+                                hintText: 'address',
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 100,
-                              width: 300,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.grey[200]),
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                          child: Text(
-                                        'address',
-                                        style: TextStyle(
-                                            color: Colors.black45,
-                                            fontSize: 16),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                      )),
-                                      SizedBox(
-                                        width: 30,
-                                      ),
-                                      Icon(
-                                        IconBroken.Location,
-                                        color: Colors.black45,
-                                      )
-                                    ],
-                                  ),
-                                ),
+
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            width: 330,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(10)),
+                            padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
+                            height: 45,
+                            child: TextFormField(
+                              controller:genderController,
+                              decoration: InputDecoration(
+
+                                border: InputBorder.none,
+                                hintText: '${cubit.customerView!.customer!.gender!}',
                               ),
                             ),
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 20,
+                          ),
+                          Container(
+                            padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
+                            width: 330,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(10)),
+
+                            height: 45,
+                            child: TextFormField(
+                              controller:phoneNumber,
+                              decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  onPressed: (){},
+                                  icon: Icon(IconBroken.Call),
+                                ),
+                                border: InputBorder.none,
+                                hintText: 'phone number',
+                              ),
+                            ),
                           ),
                           OutlinedButton(
                             onPressed: () {},

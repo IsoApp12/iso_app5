@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iso_app_5/modules/customer/search_screen.dart';
+import 'package:iso_app_5/modules/registration/login.dart';
+import 'package:iso_app_5/modules/registration/set_up_account_customer.dart';
 import 'package:iso_app_5/modules/registration/set_up_account_provider.dart';
 import 'package:iso_app_5/shared/component/constants.dart';
 import 'package:iso_app_5/shared/network/global/dio_helper/DioClient.dart';
@@ -35,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (BuildContext context)=>ServicesBlocCustomer()..getCategories()
+        BlocProvider(create: (BuildContext context)=>ServicesBlocCustomer()..getCategories()..getCustomer()
         ),
         BlocProvider(create: (BuildContext context)=>ServicesBlocRegistration()),
         BlocProvider(create: (BuildContext context)=>ServicesBlocWorker()..getProfileInfo()),
@@ -52,7 +55,7 @@ class MyApp extends StatelessWidget {
                 theme: ThemeData(
 
                 ),
-                home:  SetUpWorker(),
+                home:  SearchScreen(),
 
               );
             },

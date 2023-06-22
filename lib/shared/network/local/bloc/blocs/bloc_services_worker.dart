@@ -45,7 +45,6 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
           emit(WorkerEnabledLoacationSuccess());
           position = await Geolocator.getCurrentPosition(
               desiredAccuracy: LocationAccuracy.high);
-          print(position!.latitude);
           WorkerCurrentCameraPosition( position!);
           getAddress(position!);
           emit(GetWorkerLocationSuccess());
@@ -54,7 +53,6 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
         emit(WorkerEnabledLoacationSuccess());
         position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
-        print(position!.latitude);
         WorkerCurrentCameraPosition( position!);
         emit(GetWorkerLocationSuccess());
       }
@@ -69,7 +67,6 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
   WorkerCurrentCameraPosition(Position position){
 
     latLng= LatLng(position.latitude, position.longitude);
-    print('أنا جايلك من البوزيشن');
     emit(ChangeLatLngWorkerSuccess());
 
 
@@ -97,11 +94,12 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
     emit(WorkerGetProfileInfoLoading());
     DioClient.post(path: 'providers/profile', data: {'api_token':token},)
         .then((value) {
+
     profileInfo=ProfileInfo.fromJson(json: value.data);
       emit(WorkerGetProfileInfoSuccess());
 
     }).catchError((onError){
-      print(onError);
+       print(onError);
       emit(WorkerGetProfileInfoError());
     });
   }
