@@ -24,7 +24,7 @@ class DioClient{
 
   static Future<Response> post({
     required String path,
-    required Map<String, dynamic> data,
+    required dynamic data,
     Map<String, dynamic>? queryParameters,
   }) async {
     return dio!.post(

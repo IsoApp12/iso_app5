@@ -9,7 +9,7 @@ import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_customer
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
 class Home extends StatefulWidget {
     Home({Key? key}) : super(key: key);
-
+TextEditingController controller=TextEditingController();
   @override
   State<Home> createState() => _HomeState();
 }

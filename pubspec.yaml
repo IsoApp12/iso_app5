@@ -59,6 +59,7 @@ dependencies:
   date_picker_timeline: ^1.2.3
   geocoder2: ^1.4.0
   slide_drawer: ^1.0.3
+  file_picker: ^5.3.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
