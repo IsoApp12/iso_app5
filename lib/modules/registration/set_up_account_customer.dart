@@ -11,8 +11,7 @@ import 'package:iso_app_5/shared/network/local/bloc/states/registration_states.d
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
 class SetUpCustomer extends StatelessWidget {
    SetUpCustomer({Key? key}) : super(key: key);
-
-
+   TextEditingController nameController=TextEditingController();
    var formKey=GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -23,6 +22,7 @@ class SetUpCustomer extends StatelessWidget {
         }
       },
       builder: (context,state){
+        TextEditingController genderController=TextEditingController();
 
         var cubit=ServicesBlocCustomer.get(context);
     return    Scaffold(
@@ -82,7 +82,7 @@ class SetUpCustomer extends StatelessWidget {
                                       return 'this value can\'t be empty';
                                     }
                                   },
-                                  controller:cubit.nameController ,
+                                  controller:nameController ,
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText:'type your name ..',
@@ -135,7 +135,7 @@ class SetUpCustomer extends StatelessWidget {
                                     if(value!.isEmpty) {
                                       return 'this value can\'t be empty';
                                     }},
-                                  controller:cubit.genderController,
+                                  controller:genderController,
                                   decoration: InputDecoration(
                                     suffixIcon: FocusedMenuHolder(
                                       blurSize: 0.0,
@@ -146,8 +146,8 @@ class SetUpCustomer extends StatelessWidget {
                                         color: Colors.black,
                                       ),
                                       menuItems: [
-                                        focusedMenuItem(controller:cubit.genderController, text: 'male', icon: Icons.male, context: context,id: 1),
-                                        focusedMenuItem(controller:cubit.genderController, text: 'female', icon: Icons.female_outlined, context: context,id: 2),
+                                        focusedMenuItem(controller:genderController, text: 'male', icon: Icons.male, context: context,id: 1),
+                                        focusedMenuItem(controller:genderController, text: 'female', icon: Icons.female_outlined, context: context,id: 2),
                                       ],
                                     ),
                                     border: InputBorder.none,
@@ -164,8 +164,7 @@ class SetUpCustomer extends StatelessWidget {
                                   token: token!,
                                   lat: cubit.position!.latitude ,
                                   lng: cubit.position!.longitude ,
-                                  gender: cubit.genderController.text ,
-                                  filePath: cubit.profile!.path
+                                  gender: genderController.text ,
                                 );
                               }
                               },

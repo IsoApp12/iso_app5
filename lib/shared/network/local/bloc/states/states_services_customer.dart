@@ -25,8 +25,4 @@ class SetUpCustomerError extends ServicesStatesCustomer{}
 class getCustomerSuccess extends ServicesStatesCustomer{}
 class getCustomerLoading extends ServicesStatesCustomer{}
 class getCustomerError extends ServicesStatesCustomer{}
-class changeIdSuccess extends ServicesStatesCustomer{}
-class getProvidersbelongToCategoryLoading extends ServicesStatesCustomer{}
-class getProvidersbelongToCategorySuccess extends ServicesStatesCustomer{}
-class getProvidersbelongToCategoryError extends ServicesStatesCustomer{}
 

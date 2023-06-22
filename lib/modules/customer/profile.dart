@@ -26,6 +26,8 @@ class ProfileCustomr extends StatelessWidget {
 
       },
       builder: (context, states) {
+
+
         var cubit = ServicesBlocCustomer.get(context);
         phoneNumber.text=cubit.customerView!.customer!.phone!;
         genderController.text=cubit.customerView!.customer!.gender!;
@@ -77,13 +79,14 @@ class ProfileCustomr extends StatelessWidget {
                       alignment: AlignmentDirectional.topCenter,
                       child: Column(
                         children: [
-                          Text('${cubit.customerView!.customer!.firstName} ${cubit.customerView!.customer!.lastName}',
+                          Text(
+                            '${cubit.customerView!.customer!.firstName} ${cubit.customerView!.customer!.lastName}',
                             style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 20.0),
+                          SizedBox(height: 10.0),
                           Text(
                             '${cubit.customerView!.customer!.email}',
                             overflow: TextOverflow.ellipsis,
@@ -94,7 +97,7 @@ class ProfileCustomr extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                           Container(
                             padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
@@ -105,7 +108,6 @@ class ProfileCustomr extends StatelessWidget {
 
                             height: 45,
                             child: TextFormField(
-                              enabled: false,
                               controller:cubit.addressController,
                               decoration: InputDecoration(
                                 suffixIcon: IconButton(
@@ -117,6 +119,7 @@ class ProfileCustomr extends StatelessWidget {
                               ),
                             ),
                           ),
+
                           SizedBox(
                             height: 20,
                           ),
@@ -128,7 +131,6 @@ class ProfileCustomr extends StatelessWidget {
                             padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
                             height: 45,
                             child: TextFormField(
-                              enabled: false,
                               controller:genderController,
                               decoration: InputDecoration(
 
@@ -149,7 +151,6 @@ class ProfileCustomr extends StatelessWidget {
 
                             height: 45,
                             child: TextFormField(
-                              enabled: false,
                               controller:phoneNumber,
                               decoration: InputDecoration(
                                 suffixIcon: IconButton(
@@ -161,7 +162,33 @@ class ProfileCustomr extends StatelessWidget {
                               ),
                             ),
                           ),
-
+                          OutlinedButton(
+                            onPressed: () {},
+                            child: Container(
+                              clipBehavior: Clip.antiAlias,
+                              child: Row(
+                                children: [
+                                  Center(
+                                      child: Text(
+                                    'request location tracking',
+                                    style: TextStyle(color: Colors.blueGrey),
+                                  )),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(
+                                    IconBroken.Location,
+                                    color: Colors.blueGrey,
+                                  )
+                                ],
+                              ),
+                              height: 45,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(1),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
