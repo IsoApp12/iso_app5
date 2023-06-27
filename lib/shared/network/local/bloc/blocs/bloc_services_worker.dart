@@ -79,6 +79,7 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
         longitude:position.longitude,
         googleMapApiKey: "AIzaSyCbXXQLWMo8mIdDAd_gh9daaeYKx0G-mCc").then((value) {
       address=value.address;
+
       emit(GetAddressWorkerSuccess());
     }).catchError((onError)
     {

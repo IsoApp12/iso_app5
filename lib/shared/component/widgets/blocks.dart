@@ -1,11 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icon_broken/icon_broken.dart';
 import 'package:iso_app_5/models/back_end/categories.dart';
 import 'package:iso_app_5/modules/customer/search_screen.dart';
+import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_customer.dart';
+import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
+import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
 
-Widget categoryItem({required context, required Categoriess categoryModel,required int index})=>GestureDetector(
+Widget categoryItem({required context, required Categoriess categoryModel,required int index,required List<String>images})=>GestureDetector(
   onTap: (){
+
     Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchScreen()));
   },
   child: Container(
@@ -44,10 +49,8 @@ Widget categoryItem({required context, required Categoriess categoryModel,requir
               child: Image(
 
                 fit: BoxFit.cover,
-                image:categoryModel.categories![index].image==null? NetworkImage(
-                  'https://picsum.photos/id/237/200/300',
-                ):NetworkImage(
-                  '${categoryModel.categories![index].image}',
+                image:NetworkImage(
+                  images[index],
                 ),),
             )
         ),
@@ -57,23 +60,19 @@ Widget categoryItem({required context, required Categoriess categoryModel,requir
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '${categoryModel.categories![index].name}',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
+              SizedBox(height:5.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  '${categoryModel.categories![index].name}',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               SizedBox(height:5.0),
-              Text(
-                'Description of the category',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.grey[600],
-                ),
-              ),
+
             ],
           ),
         ),
@@ -81,12 +80,13 @@ Widget categoryItem({required context, required Categoriess categoryModel,requir
     ),
   ),
 );
-Widget homeCatItem({required context, required Categoriess categoryModel,required int index})=>GestureDetector(
+Widget homeCatItem({required context, required Categoriess categoryModel,required int index,required List <String>images,required int Id})=>GestureDetector(
   onTap: (){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchScreen()));
+  Id=index;
+  print(Id);
   },
   child: Container(
-    height: 200,
+    height: 150,
     width: 200,
     margin: EdgeInsets.symmetric(vertical: 10.0),
     padding: EdgeInsets.all(10.0),
@@ -108,7 +108,7 @@ Widget homeCatItem({required context, required Categoriess categoryModel,require
         Container(
 
             width: double.infinity,
-            height: 120,
+            height: 160,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(35.0),
 
@@ -120,12 +120,10 @@ Widget homeCatItem({required context, required Categoriess categoryModel,require
               ),
               child: Image(
 
-                fit: BoxFit.cover,
-                image:categoryModel.categories![index].image==null? NetworkImage(
-                  'https://picsum.photos/id/237/200/300',
-                ):NetworkImage(
-                  '${categoryModel.categories![index].image}',
-                ),),
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    images[index],
+                  )),
             )
         ),
 
@@ -134,6 +132,7 @@ Widget homeCatItem({required context, required Categoriess categoryModel,require
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height:10.0),
               Text(
                 '${categoryModel.categories![index].name}',
                 style: TextStyle(
@@ -142,15 +141,7 @@ Widget homeCatItem({required context, required Categoriess categoryModel,require
                 ),
               ),
               SizedBox(height:5.0),
-              Text(
-                'Description of the category',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.grey[600],
-                ),
-              ),
+
             ],
           ),
         ),
@@ -158,6 +149,7 @@ Widget homeCatItem({required context, required Categoriess categoryModel,require
     ),
   ),
 );
+
 Widget chatItem(context)=>
     Padding(
       padding: const EdgeInsets.all(8.0),
