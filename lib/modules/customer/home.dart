@@ -37,8 +37,8 @@ class _HomeCustomerState extends State<HomeCustomer> {
 
     return BlocConsumer<ServicesBlocCustomer,ServicesStatesCustomer>(
       listener: (context,states){
-        if(states is ChangeLatLngSuccess){
-          print(ServicesBlocCustomer.get(context).latLng);
+        if(states is changeIdSuccess){
+          ServicesBlocCustomer.get(context).getProvidersbelongToCategory(categoryId: ServicesBlocCustomer.get(context).Id);
         }
       },
       builder: (context,states){
@@ -62,7 +62,7 @@ class _HomeCustomerState extends State<HomeCustomer> {
 
                   ),
                   CarouselSlider.builder(
-                    itemBuilder: (context,index,x)=> homeCatItem(index:index,context:context,categoryModel:cubit.catItem!),
+                    itemBuilder: (context,index,x)=> cubit.homeCatItem(index:index,context:context,categoryModel:cubit.catItem!,images: cubit.iamges,Id: cubit.Id),
                     itemCount: cubit.catItem!.categories!.length,
                     disableGesture: false,
                     options: CarouselOptions(

@@ -162,33 +162,7 @@ class ProfileCustomr extends StatelessWidget {
                               ),
                             ),
                           ),
-                          OutlinedButton(
-                            onPressed: () {},
-                            child: Container(
-                              clipBehavior: Clip.antiAlias,
-                              child: Row(
-                                children: [
-                                  Center(
-                                      child: Text(
-                                    'request location tracking',
-                                    style: TextStyle(color: Colors.blueGrey),
-                                  )),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Icon(
-                                    IconBroken.Location,
-                                    color: Colors.blueGrey,
-                                  )
-                                ],
-                              ),
-                              height: 45,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(1),
-                              ),
-                            ),
-                          ),
+
                         ],
                       ),
                     ),

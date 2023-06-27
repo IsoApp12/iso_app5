@@ -44,6 +44,7 @@ class DioClient{
       'lang':'en',
       'Authorization':'${token}'??'',
     };
-    return await dio!.get(url,queryParameters: queryParameters);
+   return await dio!.get(url,queryParameters: queryParameters);
+
   }
 }

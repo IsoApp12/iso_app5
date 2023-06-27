@@ -13,15 +13,19 @@ class Categories extends StatelessWidget {
   Widget build(BuildContext context) {
     return   BlocConsumer<ServicesBlocCustomer,ServicesStatesCustomer>(
           listener: (context,state){},
-          builder: (context,state){ var cubit=ServicesBlocCustomer.get(context);
+          builder: (context,state){
+            var cubit=ServicesBlocCustomer.get(context);
             return SafeArea(
               child: Scaffold(
                    body: GridView.builder(
 
-                       gridDelegate:
-                       SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing: 10),
-                     itemBuilder:(BuildContext context,int index)=>categoryItem(context:context,index:index,categoryModel:cubit.catItem!) ,
+                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                         crossAxisCount: 2
+                         ,mainAxisSpacing: 10
+                         ,crossAxisSpacing: 10),
+                     itemBuilder:(BuildContext context,int index)=>categoryItem(context:context,index:index,categoryModel:cubit.catItem!,images: cubit.iamges),
                      itemCount: cubit.catItem!.categories!.length,
+
                    ),
               ),
             );

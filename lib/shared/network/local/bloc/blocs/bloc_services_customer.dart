@@ -29,7 +29,19 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
 
   List<Widget> screens = [HomeCustomer(),Categories(),TimeLine(),ProfileCustomr()];
   TextEditingController addressController=TextEditingController();
+  TextEditingController nameController=TextEditingController();
+  TextEditingController genderController=TextEditingController();
+  List<String>iamges=[
+    'https://th.bing.com/th/id/OIP.jXe8w-wKUkZv75-vcu2qVwHaGw?pid=ImgDet&rs=1',
+    'https://th.bing.com/th/id/R.ec2e39225e1c1a6c70c7276ab8d81315?rik=lhZT%2flcruC7dpA&pid=ImgRaw&r=0' ,
+    'https://uploads-ssl.webflow.com/5e15f0280711e6d86ada6d72/5f5932661d2098a4460ac910_bigstock-Plumber-Using-A-Wrench-To-Repa-354004223.jpg',
+    'https://th.bing.com/th/id/R.6b689197accce541a664d75f2228243b?rik=nqtAialxlD3DZw&riu=http%3a%2f%2fmatanh.com%2fContent%2fImages%2felctrical.jpg&ehk=WTmuEUlHoHI72mCqEw%2b1Nb9BCZ8eieZUKPbMuumoz0s%3d&risl=&pid=ImgRaw&r=0',
+    'https://th.bing.com/th/id/R.b037c395be0e1b56719d07ec7f95c72c?rik=O5uOHwyQNpIeGg&pid=ImgRaw&r=0',
+    'https://th.bing.com/th/id/R.f361a65999d222915ae750fb6740e1dd?rik=M0%2fuRASdDbG60g&pid=ImgRaw&r=0',
+    'https://th.bing.com/th/id/OIP.RgYGNYuAN2Odst9mID76KQHaE8?pid=ImgDet&rs=1',
+    'https://www.pointloma.edu/sites/default/files/styles/16_9_900w/public/images/41578050550_7418857f6f_o.jpg?h=f2fcf546&itok=JLYU7_k9'
 
+  ];
   int currentIndex = 0;
   changenavBar(int x)async {
     currentIndex = x;
@@ -154,16 +166,18 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
   // }
   // }
   
-  void upDateProfile({required String token,required double lat, required double lng, required String gender})async{
+  void upDateProfile({required String token,required double lat, required double lng, required String gender,required String filePath})async{
     emit(SetUpCustomerLoading());
     customerProfile=await CacheHelper.getData(key: 'profile');
-    DioClient.post(path: 'customers/update_profile', data: {
-      'api_token':token,
-      'lat':lat,
-      'lng':lng,
-      'gender':gender,
-
-    })
+    var formData=await FormData.fromMap(
+        {
+      'api_token': token,
+      'lat': lat,
+      'lng': lng,
+      'gender': gender,
+      'image': await MultipartFile.fromFile(filePath)
+    });
+    DioClient.post(path: 'customers/update_profile', data: formData)
    .then((value) {
      print(value.data);
      getCustomer();
@@ -191,6 +205,116 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
           emit(getCustomerError());
     });
   }
+  Widget homeCatItem({
+    required context
+    , required Categoriess categoryModel
+    ,required int index,
+    required List <String>images
+    ,required int Id})
+  =>GestureDetector(
+    onTap: (){
+      Id=index;
+      print(Id);
+      emit(changeIdSuccess());
+    },
+    child: Container(
+      height: 150,
+      width: 200,
+      margin: EdgeInsets.symmetric(vertical: 10.0),
+      padding: EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
 
+              width: double.infinity,
+              height: 160,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(35.0),
+
+              ),
+              child:Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                child: Image(
+
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      images[index],
+                    )),
+              )
+          ),
+
+          SizedBox(width: 10.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height:10.0),
+                Text(
+                  '${categoryModel.categories![index].name}',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height:5.0),
+
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  int Id=1;
+ void getProvidersbelongToCategory({required int categoryId}){
+   categoryId=this.Id;
+   emit(getProvidersbelongToCategoryLoading());
+   DioClient.post(path: 'customers/category-providers', data:
+           {
+             'api_token':token,
+             'category':categoryId
+           })
+    .then((value){
+      print(value.data);
+     emit(getProvidersbelongToCategorySuccess());
+   })
+    .catchError((onError){
+      print(onError);
+      emit(getProvidersbelongToCategoryError());
+});
+} 
+ void getProvidersbelongToSubCategory({required int subCategoryId}){
+   emit(getProvidersbelongToCategoryLoading());
+   DioClient.post(path: 'customers/sub-category-providers', data:
+           {
+             'api_token':token,
+             'category':categoryId
+           })
+    .then((value){
+      print(value.data);
+     emit(getProvidersbelongToCategorySuccess());
+   })
+    .catchError((onError){
+      print(onError);
+      emit(getProvidersbelongToCategoryError());
+});
+}
 
 }

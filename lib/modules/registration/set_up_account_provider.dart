@@ -252,9 +252,7 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                           ),
                                           onPressed: ()async {
                                           cubit.getPosition(context).then((value) {
-                                           if(cubit.address!=null){
-                                             cubit.addressController.text=cubit.address!;
-                                           }
+
                                           });
 
                                           },
@@ -375,7 +373,7 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                             job_title: cubit.jobitle.text!=null?cubit.jobitle.text:null,
                             job_description: cubit.jobDiscription.text!=null?cubit.jobDiscription.text:null,
                             gender:cubit.genderController.text != null ?cubit.genderController.text:null,
-                            image:cubit.formData !=null?cubit.formData:null
+                            filePath:cubit.profile !=null?cubit.profile!.path:null
                         );
                           print(await CacheHelper.getData(key: 'token'));
 
