@@ -17,16 +17,7 @@ class TimeLine extends StatelessWidget {
           List <TextEditingController> controllers=
           List.generate(10, (index) => TextEditingController());
           return Scaffold(
-            appBar: AppBar(
 
-              backgroundColor: Colors.white,
-              elevation: 0.0,
-              title: Text('Home',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-              actions: [
-                IconButton(onPressed: (){}, icon: Icon(IconBroken.Notification,color: Colors.black,)),
-                IconButton(onPressed: (){}, icon: Icon(IconBroken.Message,color: Colors.black,)),
-              ],
-            ),
             body: ConditionalBuilder(
               fallback: (context)=>Center(child: CircularProgressIndicator()) ,
               condition:10 !=1  ,

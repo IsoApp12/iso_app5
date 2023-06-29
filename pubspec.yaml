@@ -62,6 +62,7 @@ dependencies:
   file_picker: ^5.3.2
   flash: ^3.0.5+1
   flutter_polyline_points: ^1.0.0
+  flutter_map: ^4.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

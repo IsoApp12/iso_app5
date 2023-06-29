@@ -21,6 +21,7 @@ TextEditingController addressController=TextEditingController();
     Set <Marker>getMarkers(){
       Set <Marker> markers=Set();
       markers.add(Marker(markerId:MarkerId('1'),icon:
+          //
       BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)
           ,position: LatLng(38.9071932,-77.0368727)
           ,onTap: (){
@@ -85,6 +86,7 @@ TextEditingController addressController=TextEditingController();
 
 
           ),
+
 
       ));
       markers.add(Marker(markerId:MarkerId('2'),icon:
