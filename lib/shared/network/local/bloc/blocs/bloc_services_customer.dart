@@ -147,24 +147,7 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
       print('no image selected');
     }
   }
-  // FormData? formData;
-  // Future<void> uploadImage(File image, double? lat, double? lng, String? gender) async {
-  // try  {
-  //
-  //     String filename = image.path.split('/').last;
-  //       formData = FormData.fromMap({
-  //         'api_token':token,
-  //         'lat':lat,
-  //         'lng':lng,
-  //         'gender':gender,
-  //        'photo': await MultipartFile.fromFile(image!.path,
-  //            filename: image!.path.split('/').last),
-  //      });
-  //
-  //   }catch (onError){
-  //  print(onError);
-  // }
-  // }
+
   
   void upDateProfile({required String token,required double lat, required double lng, required String gender,required String filePath})async{
     emit(SetUpCustomerLoading());

@@ -51,6 +51,7 @@ class _HomeCustomerState extends State<HomeCustomer> {
                 alignment: Alignment.bottomCenter,
                 children: [
                   GoogleMap(
+
                     initialCameraPosition: CameraPosition(
                         target: cubit.latLng!,zoom: 8),
                     onMapCreated: (GoogleMapController controller) {
