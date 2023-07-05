@@ -35,64 +35,24 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
   TextEditingController accountTypeController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  TextEditingController pricingController = TextEditingController();
+ TextEditingController pricingController = TextEditingController();
   TextEditingController jobExperience = TextEditingController();
   PageController pageController = PageController();
-
   bool isLast = false;
-
-  changeIsLast() {
-    isLast = true;
-    emit(ChangeIsLast());
-  }
-
-  workerRegister({
-    required String first_name,
-    required String last_name,
-    required String email,
-    required String password,
-    required String phone,
-  }) {
-    DioClient.post(path: 'provider/register', data: {
-      'first_name': first_name,
-      'last_name': last_name,
-      'email': email,
-      'password': password,
-      'phone': phone
-    }).then((value) {
-      print(value.data);
-      register = Register.fromJson(Json: value.data);
-      emit(WorkerRegisterSuccess(0));
-    }).catchError((onError) {
-      print(onError);
-      emit(WorkerRegisterError());
-    });
-  }
-
   Register? register;
 
-  customerRegister({
-    required String first_name,
-    required String last_name,
-    required String email,
-    required String password,
-    required String phone,
-  }) {
-    emit(CustomerRegisterLoading());
-    DioClient.post(path: 'customer/register', data: {
-      'first_name': first_name,
-      'last_name': last_name,
-      'email': email,
-      'password': password,
-      'phone': phone
-    }).then((value) {
-      print(value.data);
-      register = Register.fromJson(Json: value.data);
-      emit(CustomerRegisterSuccess(1));
-    }).catchError((onError) {
-      print(onError);
-      emit(CustomerRegisterError());
-    });
+
+
+
+
+
+
+  changeIsLast(int index) {
+    if (index >= 1)
+    isLast = true;
+    else if(index <1)
+      isLast = false;
+    emit(ChangeIsLast());
   }
 
   verification({
@@ -132,60 +92,54 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
 
       if (userLoginn!.type == 0) {
         userLoginCustomer = UserLoginCustomer.fromJson(value.data);
-        print(userLoginCustomer!.user!.firstName);
-        emit(UserLoginAssigningCustomer());
+
+        emit(UserLoginSuccess(userLogin: userLoginn!));
+        getCustomer();
       } else if (userLoginn!.type == 1) {
         userLoginModel = UserLoginModelWorker.fromJson(value.data);
-
-        emit(UserLoginAssigningWorker());
+        emit(UserLoginSuccess(userLogin: userLoginn!));
         getProfileInfo();
       }
-      emit(UserLoginSuccess(userLogin: userLoginn!));
+
+
     }).catchError((onError) {
       emit(UserLoginError());
       print('user login model${onError}');
     });
   }
 
+
+
+
+  //worker ----------------------------------------------------------
+
+
+
+
+  workerRegister({
+    required String first_name,
+    required String last_name,
+    required String email,
+    required String password,
+    required String phone,
+  }) {
+    DioClient.post(path: 'provider/register', data: {
+      'first_name': first_name,
+      'last_name': last_name,
+      'email': email,
+      'password': password,
+      'phone': phone
+    }).then((value) {
+      print(value.data);
+      register = Register.fromJson(Json: value.data);
+      emit(WorkerRegisterSuccess(0));
+    }).catchError((onError) {
+      print(onError);
+      emit(WorkerRegisterError());
+    });
+  }
   Position? position;
 
-  Future<void> getPosition(context) async {
-    try {
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.always) {
-          emit(SetUpenabledPermissionSuccess());
-          position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          getAddress(position!);
-          emit(GetsetupLocationSuccess());
-        }
-      } else if (permission == LocationPermission.always) {
-        emit(SetUpenabledPermissionSuccess());
-        position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
-        getAddress(position!);
-        emit(GetsetupLocationSuccess());
-      }
-    } catch (onError) {
-      print(onError);
-      emit(SetUpenabledPermissionError());
-    }
-    ;
-  }
-
-  // File? imageFile;
-  // getImageFromGallry() async {
-  //   emit(CameImageLoading());
-  //   ImagePicker().pickImage(source: ImageSource.gallery).then((value) {
-  //     imageFile = value as File?;
-  //     emit(CameImagSuccess());
-  //   })
-  //       .catchError((onError) {
-  //     print(onError);
-  //            });
-  // }
   void workerSetUp({
     required String api_token,
     int? city_id,
@@ -212,10 +166,11 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
           'job_title': job_title,
           'job_description': job_description,
           'email': gender,
-          'image': await MultipartFile.fromFile(filePath!)
+          'image':filePath != null ? await MultipartFile.fromFile(filePath!):null
         });
     DioClient.post(path: 'providers/update_profile', data: formData
     ).then((value) {
+      print(value);
       emit(WorkerSetUpSuccess());
       getProfileInfo();
     }).catchError((onError) {
@@ -223,7 +178,31 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
       print('!!!!!!!!!!!!${onError}');
     });
   }
-
+  Future<void> getPosition(context) async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.always) {
+          emit(SetUpenabledPermissionSuccess());
+          position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          getAddress(position!);
+          emit(GetsetupLocationSuccess());
+        }
+      } else if (permission == LocationPermission.always) {
+        emit(SetUpenabledPermissionSuccess());
+        position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        getAddress(position!);
+        emit(GetsetupLocationSuccess());
+      }
+    } catch (onError) {
+      print(onError);
+      emit(SetUpenabledPermissionError());
+    }
+    ;
+  }
   ProfileInfo? profileInfo;
 
   void getProfileInfo() {
@@ -265,19 +244,16 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     });
   }
 
-  CustomerView? customerView;
+
   var ProfilePicker = ImagePicker();
   File? profile;
   var pickedImage;
-
   Future<void> profilePicker() async {
     emit(pickProfileLoading());
     pickedImage = await ProfilePicker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       profile = File(pickedImage!.path);
-      uploadImage(profile!).catchError((onError) {
-        print(onError);
-      });
+
       emit(pickProfileSuccess());
     } else {
       emit(pickProfileeError());
@@ -285,16 +261,158 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     }
   }
 
-  FormData? formData;
 
-  Future<void> uploadImage(File image) async {
-    String filename = image.path.split('/').last;
-    formData!.files.add(MapEntry(
-      'photo',
-      await MultipartFile.fromFile(
-        image!.path,
-        filename: image!.path.split('/').last,
-      ),
-    ));
+
+
+
+
+
+//Customer-------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  TextEditingController addressCustomerController = TextEditingController();
+  TextEditingController nameCustomerController = TextEditingController();
+  TextEditingController genderCustomerController = TextEditingController();
+  String? addressCustomer;
+  var ProfilePickerCustomer = ImagePicker();
+  File? profileCustomer;
+  var pickedImageCustomer;
+  CustomerView? customerView;
+  Position? positionCustomer;
+
+  customerRegister({
+    required String first_name,
+    required String last_name,
+    required String email,
+    required String password,
+    required String phone,
+  }) {
+    emit(CustomerRegisterLoading());
+    DioClient.post(path: 'customer/register', data: {
+      'first_name': first_name,
+      'last_name': last_name,
+      'email': email,
+      'password': password,
+      'phone': phone
+    }).then((value) {
+      print(value.data);
+      register = Register.fromJson(Json: value.data);
+      emit(CustomerRegisterSuccess(1));
+    }).catchError((onError) {
+      print(onError);
+      emit(CustomerRegisterError());
+    });
   }
+  Future<void> profilePickerCustomer() async {
+    emit(gerImageFromCustomerGalleryLoading());
+    pickedImageCustomer = await ProfilePickerCustomer.pickImage(source: ImageSource.gallery);
+    if (pickedImageCustomer != null) {
+      profileCustomer =  File(pickedImageCustomer!.path);
+      CacheHelper.setData(key: 'profile',value: '${pickedImageCustomer!.path}').then((value) {
+
+        print('cached image suucessfully');
+        emit(gerImageFromCustomerGallerySuccess());
+      });
+
+
+
+    } else {
+      emit(gerImageFromCustomerGalleryError());
+      print('no image selected');
+    }
+  }
+
+  Future<void> getPositionCustomer(context) async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.always) {
+          emit(CustomerSetUpenabledPermissionSuccess());
+          positionCustomer = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          getAddress(positionCustomer!);
+          emit(GetsetupLocationSuccess());
+        }
+      } else if (permission == LocationPermission.always) {
+        emit(CustomerSetUpenabledPermissionSuccess());
+        positionCustomer = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        getAddressCustomer(positionCustomer!);
+        emit(GetsetupCustomerLocationSuccess());
+      }
+    } catch (onError) {
+      print(onError);
+      emit(CustomerSetUpenabledPermissionError());
+    }
+    ;
+  }
+
+  getAddressCustomer(Position positionCustomer) async {
+    Geocoder2.getDataFromCoordinates(
+        latitude: positionCustomer.latitude,
+        longitude: positionCustomer.longitude,
+        googleMapApiKey: "AIzaSyCbXXQLWMo8mIdDAd_gh9daaeYKx0G-mCc")
+        .then((value) {
+      addressCustomer = value.address;
+      addressCustomerController.text = value.address;
+
+      emit(CustomerAdressSuccess());
+    }).catchError((onError) {
+      print(onError);
+      emit(CustomerAdressError());
+    });
+  }
+
+  void getCustomer(){
+    emit(getCustomerLoading());
+    DioClient.post(path: 'customers/profile', data: {'api_token':token})
+        .then((value) {
+      customerView=CustomerView.fromJson(json:value.data);
+      print(value.data);
+      print('${customerView!.customer!.email}7777777777777');
+      emit(getCustomerSuccess());
+    })
+        .catchError((onError){
+      print(onError);
+      emit(getCustomerError());
+    });
+  }
+  void upDateProfile({required String token,required double lat, required double lng, required String gender,required String filePath})async{
+    emit(SetUpCustomerLoading());
+    customerProfile=await CacheHelper.getData(key: 'profile');
+    var formData=await FormData.fromMap(
+        {
+          'api_token': token,
+          'lat': lat,
+          'lng': lng,
+          'gender': gender,
+          'image': await MultipartFile.fromFile(filePath)
+        });
+    DioClient.post(path: 'customers/update_profile', data: formData)
+        .then((value) {
+      print(value.data);
+      getCustomer();
+      emit(SetUpCustomerSuccess());
+
+    })
+        .catchError((onError){
+      print(onError);
+      emit(SetUpCustomerError());
+    });
+  }
+
+
 }

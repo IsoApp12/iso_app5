@@ -20,13 +20,12 @@ TextEditingController addressController=TextEditingController();
   Widget build(BuildContext context) {
     Set <Marker>getMarkers(){
       Set <Marker> markers=Set();
-      markers.add(Marker(markerId:MarkerId('1'),icon:
-          //
-      BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)
+      markers.add(
+      Marker(
+           markerId:MarkerId('1')
+          ,icon:BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)
           ,position: LatLng(38.9071932,-77.0368727)
-          ,onTap: (){
-
-          }
+          ,onTap: (){}
           ,infoWindow: InfoWindow(
             title: 'cairo ,nasr city 6th street ',
             snippet: 'click here for more details',
@@ -130,15 +129,13 @@ TextEditingController addressController=TextEditingController();
                   zoomControlsEnabled: false,
                   markers: getMarkers(),
                   initialCameraPosition: CameraPosition(
-
-                      target: cubit.latLng!,zoom: 10),
+                  target: cubit.latLng!,zoom: 10),
                   onMapCreated: (GoogleMapController controller) {
                     _controller=controller;
                     setMapStyle();
 
 
                   },
-
                 ),
                 Positioned(
                   top: 80,

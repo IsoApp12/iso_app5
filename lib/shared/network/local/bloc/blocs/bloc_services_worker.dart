@@ -96,7 +96,8 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
     DioClient.post(path: 'providers/profile', data: {'api_token':token},)
         .then((value) {
 
-    profileInfo=ProfileInfo.fromJson(json: value.data);
+      profileInfo=ProfileInfo.fromJson(json: value.data);
+      print(profileInfo!.provider!.imageurl!);
       emit(WorkerGetProfileInfoSuccess());
 
     }).catchError((onError){

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:focused_menu_custom/focused_menu.dart';
@@ -9,6 +11,7 @@ import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_customer
 import 'package:iso_app_5/shared/network/local/bloc/blocs/registration_bloc.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/registration_states.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_customer.dart';
+import 'package:iso_app_5/shared/network/local/cache_helper/cache_helper.dart';
 class SetUpCustomer extends StatelessWidget {
    SetUpCustomer({Key? key}) : super(key: key);
 
@@ -16,16 +19,28 @@ class SetUpCustomer extends StatelessWidget {
    var formKey=GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ServicesBlocCustomer,ServicesStatesCustomer>(
+    return BlocConsumer<ServicesBlocRegistration,RegistrationStates>(
       listener: (context,state){
         if(state is SetUpCustomerSuccess){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerLayOut()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerLayOut(customerView:ServicesBlocRegistration.get(context).customerView ,)));
         }
       },
       builder: (context,state){
 
-        var cubit=ServicesBlocCustomer.get(context);
+        var cubit=ServicesBlocRegistration.get(context);
     return    Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        actions: [
+          TextButton(onPressed: (){
+           CacheHelper.setData(key: 'setupDone', value: true).then((value) {
+              cubit.getCustomer();
+             Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerLayOut(customerView: cubit.customerView,)));
+           });
+          }, child: Text('skip',style: TextStyle(color: Colors.blueGrey),))
+        ],
+      ),
           body: Form(
             key: formKey,
             child: Center(
@@ -58,8 +73,11 @@ class SetUpCustomer extends StatelessWidget {
                                 children: [
                                   CircleAvatar(
                                     radius: 50,
-                                    backgroundImage: cubit.profile!=null?FileImage(cubit!.profile!)as ImageProvider:NetworkImage(
-                                        'https://th.bing.com/th/id/OIP.v4fJOAuz1Jx4wirUYOrn7AHaE8?pid=ImgDet&w=1024&h=683&rs=1'),
+                                    backgroundImage:  cubit.customerView != null ?
+                                    NetworkImage(cubit.customerView!.customer!.imageurl!):
+                                    cubit.profile != null?FileImage(File(cubit.profileCustomer!.path!)):
+                                    NetworkImage(
+                                        'https://th.bing.com/th/id/OIP.v4fJOAuz1Jx4wirUYOrn7AHaE8?pid=ImgDet&w=1024&h=683&rs=1') as ImageProvider
                                   ),
                                   IconButton(
                                     icon: Icon(IconBroken.Camera),
@@ -82,7 +100,7 @@ class SetUpCustomer extends StatelessWidget {
                                       return 'this value can\'t be empty';
                                     }
                                   },
-                                  controller:cubit.nameController ,
+                                  controller:cubit.nameCustomerController ,
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText:'type your name ..',
@@ -103,7 +121,7 @@ class SetUpCustomer extends StatelessWidget {
 
                                 height: 45,
                                 child: TextFormField(
-                                  controller:cubit.addressController,
+                                  controller:cubit.addressCustomerController,
                                   validator: (value){
                                     if(value!.isEmpty) {
                                              return 'this value can\'t be empty';
@@ -111,7 +129,7 @@ class SetUpCustomer extends StatelessWidget {
                                   decoration: InputDecoration(
                                     suffixIcon: IconButton(
                                         onPressed: (){
-                                          cubit.enablePermission(context);
+                                          cubit.getPositionCustomer(context);
                                         },
                                       icon: Icon(IconBroken.Location),
                                     ),
@@ -135,7 +153,7 @@ class SetUpCustomer extends StatelessWidget {
                                     if(value!.isEmpty) {
                                       return 'this value can\'t be empty';
                                     }},
-                                  controller:cubit.genderController,
+                                  controller:cubit.genderCustomerController,
                                   decoration: InputDecoration(
                                     suffixIcon: FocusedMenuHolder(
                                       blurSize: 0.0,
@@ -146,8 +164,8 @@ class SetUpCustomer extends StatelessWidget {
                                         color: Colors.black,
                                       ),
                                       menuItems: [
-                                        focusedMenuItem(controller:cubit.genderController, text: 'male', icon: Icons.male, context: context,id: 1),
-                                        focusedMenuItem(controller:cubit.genderController, text: 'female', icon: Icons.female_outlined, context: context,id: 2),
+                                        focusedMenuItem(controller:cubit.genderCustomerController, text: 'male', icon: Icons.male, context: context,id: 1),
+                                        focusedMenuItem(controller:cubit.genderCustomerController, text: 'female', icon: Icons.female_outlined, context: context,id: 2),
                                       ],
                                     ),
                                     border: InputBorder.none,
@@ -162,10 +180,10 @@ class SetUpCustomer extends StatelessWidget {
                               if(formKey.currentState!.validate()){
                                 cubit.upDateProfile(
                                   token: token!,
-                                  lat: cubit.position!.latitude ,
-                                  lng: cubit.position!.longitude ,
+                                  lat: cubit.positionCustomer!.latitude ,
+                                  lng: cubit.positionCustomer!.longitude ,
                                   gender: cubit.genderController.text ,
-                                  filePath: cubit.profile!.path
+                                  filePath: cubit.profileCustomer!.path
                                 );
                               }
                               },

@@ -384,3 +384,7 @@ Widget buildChatItem({context})=>
         ),
       ),
     );
+Widget itemSeparator()=>Padding(
+  padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
+  child:   Container(height: 1,width: double.infinity,color: Colors.grey[400],),
+);

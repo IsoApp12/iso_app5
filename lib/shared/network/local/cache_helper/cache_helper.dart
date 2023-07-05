@@ -25,10 +25,9 @@ class CacheHelper{
     required String key,
   })    async {
     return await sharedPreferences!.get(key);}
-  static  deleteData({
-    required String key,
-  }){
-    return  sharedPreferences?.remove(key);
+  static Future<dynamic> removeData({required String key})
+  async {
+    return await sharedPreferences!.remove(key);
   }
 
 }

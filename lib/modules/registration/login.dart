@@ -29,17 +29,24 @@ class LoginScreen extends StatelessWidget {
 
        if( states.userLogin.type==0){
 
+      CacheHelper.setData(key: 'type', value: 0).then((value){
+        accountType=0;
         CacheHelper.setData(key: 'token', value: '${states.userLogin.api_token}').then((value) {
+          token=states.userLogin.api_token;
           Navigator.push(context, MaterialPageRoute(builder: (context)=>SetUpCustomer()));
         });
+      } );
        }else  if( states.userLogin.type==1){
-         CacheHelper.setData(key: 'token', value: '${states.userLogin.api_token}')
-             .then((value) async{
-               token=await CacheHelper.getData(key: 'token');
-            if(setTrue==false){
-               Navigator.push(context, MaterialPageRoute(builder: (context)=>SetUpWorker()));
-            }else{
-               Navigator.push(context, MaterialPageRoute(builder: (context)=>WorkerLatOut()));}});
+
+        CacheHelper.setData(key: 'type', value: 1).then((value) {
+          accountType=0;
+          CacheHelper.setData(key: 'token', value: '${states.userLogin.api_token}')
+              .then((value) async{
+            token=states.userLogin.api_token;
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>SetUpWorker()));
+
+          });
+        });
 
        }
 

@@ -17,7 +17,7 @@ import 'package:iso_app_5/shared/network/local/cache_helper/cache_helper.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class SetUpWorker extends StatefulWidget {
-  SetUpWorker ({Key? key}) : super(key: key);
+  SetUpWorker({Key? key}) : super(key: key);
 
   @override
   State<SetUpWorker> createState() => _SetUpWorkerState();
@@ -26,134 +26,165 @@ class SetUpWorker extends StatefulWidget {
 class _SetUpWorkerState extends State<SetUpWorker> {
   @override
   Widget build(BuildContext context) {
-
-
-    return BlocConsumer<ServicesBlocRegistration,RegistrationStates>(
-      listener: (context,state){
-        if(state is WorkerSetUpSuccess) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => WorkerLatOut()));
+    return BlocConsumer<ServicesBlocRegistration, RegistrationStates>(
+      listener: (context, state) {
+        if (state is WorkerSetUpSuccess) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => WorkerLatOut(
+                        profileInfo:
+                            ServicesBlocRegistration.get(context).profileInfo,
+                      )));
         }
       },
-      builder: (context,state){
-        var cubit=ServicesBlocRegistration.get(context);
+      builder: (context, state) {
+        var cubit = ServicesBlocRegistration.get(context);
         return Scaffold(
+          appBar: AppBar(
+            elevation: 0.0,
+            backgroundColor: Colors.grey.withOpacity(0.5),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    CacheHelper.setData(key: 'setupDone', value: true)
+                        .then((value) {
+                      cubit.getProfileInfo();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WorkerLatOut(
+                                    profileInfo: cubit.profileInfo,
+                                  )));
+                    });
+                  },
+                  child: Text(
+                    'skip',
+                    style: TextStyle(color: Colors.blueGrey),
+                  ))
+            ],
+          ),
           backgroundColor: Colors.grey[300],
           body: Column(
             children: [
               Expanded(
                 child: PageView(
-                  controller:cubit.pageController ,
+                  controller: cubit.pageController,
                   children: [
                     Center(
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.only(
-                              top: 40, bottom: 40, start: 30, end: 30),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white, borderRadius: BorderRadius.circular(15)),
-                            padding: EdgeInsets.all(20),
-                            child: SingleChildScrollView(
-                              child: Column(
+                      padding: const EdgeInsetsDirectional.only(
+                          top: 40, bottom: 40, start: 30, end: 30),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15)),
+                        padding: EdgeInsets.all(20),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Stack(
+                                alignment: Alignment.bottomLeft,
                                 children: [
-                                  Stack(
-                                    alignment: Alignment.bottomLeft,
-                                    children: [
-                                      CircleAvatar(
-                                          radius: 50,
-                                          backgroundImage:
-                                          ServicesBlocRegistration.get(context).profile != null ?
-                                          FileImage(ServicesBlocRegistration.get(context).profile!): NetworkImage(
-                                              'https://th.bing.com/th/id/OIP.v4fJOAuz1Jx4wirUYOrn7AHaE8?pid=ImgDet&w=1024&h=683&rs=1') as ImageProvider
-                                      ),
-                                      IconButton(
-                                        icon: Icon(IconBroken.Camera),
-                                        onPressed: () {
-                                          ServicesBlocRegistration.get(context).profilePicker();
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Container(
-
-                                    width: 120,
-                                    child: TextFormField(
-                                      controller:cubit.nameController ,
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText:'type your name ..',
-                                          labelStyle: TextStyle(fontSize: 18, color: Colors.black54)
-
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
-                                    width: 330,
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(10)),
-
-                                    height: 45,
-                                    child: TextFormField(
-                                      controller: cubit.jobitle,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'job title...',
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    width: 330,
-                                    padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(10)),
-
-                                    height: 100,
-                                    child: TextField(
-                                      maxLines: 4,
-                                      controller:cubit. jobDiscription,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'job discrpipton...',
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
-                                    width: 330,
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(10)),
-
-                                    height: 70,
-                                    child: TextField(
-                                      controller: cubit.jobExperience,
-                                      maxLines: 4,
-                                      decoration: InputDecoration(
-
-                                        border: InputBorder.none,
-                                        hintText: 'Experiences',
-                                      ),
-                                    ),
-                                  ),
+                                  CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: cubit.profileInfo !=
+                                              null
+                                          ? NetworkImage(cubit
+                                              .profileInfo!.provider!.imageurl!)
+                                          : cubit.profile != null
+                                              ? FileImage(
+                                                  File(cubit.profile!.path!))
+                                              : NetworkImage(
+                                                      'https://th.bing.com/th/id/OIP.v4fJOAuz1Jx4wirUYOrn7AHaE8?pid=ImgDet&w=1024&h=683&rs=1')
+                                                  as ImageProvider),
+                                  IconButton(
+                                    icon: Icon(IconBroken.Camera),
+                                    onPressed: () {
+                                      ServicesBlocRegistration.get(context)
+                                          .profilePicker();
+                                    },
+                                  )
                                 ],
                               ),
-                            ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                width: 120,
+                                child: TextFormField(
+                                  controller: cubit.nameController,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'type your name ..',
+                                      labelStyle: TextStyle(
+                                          fontSize: 18, color: Colors.black54)),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    horizontal: 10),
+                                width: 330,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(10)),
+                                height: 45,
+                                child: TextFormField(
+                                  controller: cubit.jobitle,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'job title...',
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                width: 330,
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    horizontal: 10),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(10)),
+                                height: 100,
+                                child: TextField(
+                                  maxLines: 4,
+                                  controller: cubit.jobDiscription,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'job discrpipton...',
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                    horizontal: 10),
+                                width: 330,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(10)),
+                                height: 70,
+                                child: TextField(
+                                  controller: cubit.jobExperience,
+                                  maxLines: 4,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Experiences',
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        )),
+                        ),
+                      ),
+                    )),
                     Center(
                       child: Padding(
                           padding: const EdgeInsetsDirectional.only(
@@ -172,11 +203,14 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                     width: 330,
                                     decoration: BoxDecoration(
                                         color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(10)),
-                                    padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    padding:
+                                        const EdgeInsetsDirectional.symmetric(
+                                            horizontal: 10),
                                     height: 45,
                                     child: TextFormField(
-                                      controller:cubit. categoryController,
+                                      controller: cubit.categoryController,
                                       decoration: InputDecoration(
                                         suffixIcon: FocusedMenuHolder(
                                           widthBorder: 80,
@@ -188,12 +222,43 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                             color: Colors.black,
                                           ),
                                           menuItems: [
-                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:IconBroken.Work,text:'crafts',id: 4),
-                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:Icons.local_pharmacy_rounded,text:'medical',id: 3),
-                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:IconBroken.Danger,text:'electrical',id:8),
-                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:Icons.account_balance_sharp,text:'Lawyers',id: 10),
-                                            focusedMenuItem(context:context,controller:cubit.categoryController,icon:Icons.laptop,text:'programmer',id: 7),
-
+                                            focusedMenuItem(
+                                                context: context,
+                                                controller:
+                                                    cubit.categoryController,
+                                                icon: IconBroken.Work,
+                                                text: 'crafts',
+                                                id: 4),
+                                            focusedMenuItem(
+                                                context: context,
+                                                controller:
+                                                    cubit.categoryController,
+                                                icon: Icons
+                                                    .local_pharmacy_rounded,
+                                                text: 'medical',
+                                                id: 3),
+                                            focusedMenuItem(
+                                                context: context,
+                                                controller:
+                                                    cubit.categoryController,
+                                                icon: IconBroken.Danger,
+                                                text: 'electrical',
+                                                id: 8),
+                                            focusedMenuItem(
+                                                context: context,
+                                                controller:
+                                                    cubit.categoryController,
+                                                icon:
+                                                    Icons.account_balance_sharp,
+                                                text: 'Lawyers',
+                                                id: 10),
+                                            focusedMenuItem(
+                                                context: context,
+                                                controller:
+                                                    cubit.categoryController,
+                                                icon: Icons.laptop,
+                                                text: 'programmer',
+                                                id: 7),
                                           ],
                                         ),
                                         border: InputBorder.none,
@@ -208,8 +273,11 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                     width: 330,
                                     decoration: BoxDecoration(
                                         color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(10)),
-                                    padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    padding:
+                                        const EdgeInsetsDirectional.symmetric(
+                                            horizontal: 10),
                                     height: 45,
                                     child: TextFormField(
                                       controller: cubit.genderController,
@@ -223,8 +291,20 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                             color: Colors.black,
                                           ),
                                           menuItems: [
-                                            focusedMenuItem(controller:cubit. genderController, text: 'male', icon: Icons.male, context: context,id: 1),
-                                            focusedMenuItem(controller: cubit.genderController, text: 'female', icon: Icons.female_outlined, context: context,id: 2),
+                                            focusedMenuItem(
+                                                controller:
+                                                    cubit.genderController,
+                                                text: 'male',
+                                                icon: Icons.male,
+                                                context: context,
+                                                id: 1),
+                                            focusedMenuItem(
+                                                controller:
+                                                    cubit.genderController,
+                                                text: 'female',
+                                                icon: Icons.female_outlined,
+                                                context: context,
+                                                id: 2),
                                           ],
                                         ),
                                         border: InputBorder.none,
@@ -239,22 +319,24 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                     width: 330,
                                     decoration: BoxDecoration(
                                         color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(10)),
-                                    padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    padding:
+                                        const EdgeInsetsDirectional.symmetric(
+                                            horizontal: 10),
                                     height: 45,
                                     child: TextFormField(
-                                      controller:cubit. addressController,
+                                      controller: cubit.addressController,
                                       decoration: InputDecoration(
                                         suffixIcon: IconButton(
                                           icon: Icon(
                                             IconBroken.Location,
                                             color: Colors.greenAccent,
                                           ),
-                                          onPressed: ()async {
-                                          cubit.getPosition(context).then((value) {
-
-                                          });
-
+                                          onPressed: () async {
+                                            cubit
+                                                .getPosition(context)
+                                                .then((value) {});
                                           },
                                         ),
                                         border: InputBorder.none,
@@ -269,11 +351,14 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                     width: 330,
                                     decoration: BoxDecoration(
                                         color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(10)),
-                                    padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    padding:
+                                        const EdgeInsetsDirectional.symmetric(
+                                            horizontal: 10),
                                     height: 45,
                                     child: TextFormField(
-                                      controller:cubit. accountTypeController,
+                                      controller: cubit.accountTypeController,
                                       decoration: InputDecoration(
                                         suffixIcon: FocusedMenuHolder(
                                           blurSize: 0.0,
@@ -284,9 +369,20 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                             color: Colors.black,
                                           ),
                                           menuItems: [
-                                            focusedMenuItem(controller:cubit. accountTypeController, text: 'company', icon: IconBroken.User1, context: context,id: 1),
-                                            focusedMenuItem(controller:cubit. accountTypeController, text: 'self_employed', icon: Icons.person_2_outlined, context: context,id:2),
-
+                                            focusedMenuItem(
+                                                controller:
+                                                    cubit.accountTypeController,
+                                                text: 'company',
+                                                icon: IconBroken.User1,
+                                                context: context,
+                                                id: 1),
+                                            focusedMenuItem(
+                                                controller:
+                                                    cubit.accountTypeController,
+                                                text: 'self_employed',
+                                                icon: Icons.person_2_outlined,
+                                                context: context,
+                                                id: 2),
                                           ],
                                         ),
                                         border: InputBorder.none,
@@ -301,24 +397,65 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                     width: 330,
                                     decoration: BoxDecoration(
                                         color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(10)),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                     padding: EdgeInsetsDirectional.only(
-                                        top: 10, start: 20, end: 15, bottom: 10),
+                                        top: 10,
+                                        start: 20,
+                                        end: 15,
+                                        bottom: 10),
                                     height: 45,
                                     child: TextFormField(
-                                      controller:cubit.pricingController ,
+                                      controller: cubit.pricingController,
                                       decoration: InputDecoration(
                                         suffixIcon: FocusedMenuHolder(
                                           openWithTap: true,
-                                          child: Icon(IconBroken.Arrow___Down_2,color: Colors.black,),
+                                          child: Icon(
+                                            IconBroken.Arrow___Down_2,
+                                            color: Colors.black,
+                                          ),
                                           onPressed: () {},
                                           menuItems: [
-                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 1k', icon: Icons.monetization_on_outlined, context: context,id: 1),
-                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 5k', icon: Icons.monetization_on_outlined, context: context,id: 2),
-                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 10k', icon: Icons.monetization_on_outlined, context: context,id: 3),
-                                            focusedMenuItem(controller:cubit. pricingController, text: 'less 50k', icon: Icons.monetization_on_outlined, context: context,id:4),
-                                            focusedMenuItem(controller:cubit. pricingController, text: 'more', icon: Icons.monetization_on_outlined, context: context,id:5),
-
+                                            focusedMenuItem(
+                                                controller:
+                                                    cubit.pricingController,
+                                                text: 'less 1k',
+                                                icon: Icons
+                                                    .monetization_on_outlined,
+                                                context: context,
+                                                id: 1),
+                                            focusedMenuItem(
+                                                controller:
+                                                    cubit.pricingController,
+                                                text: 'less 5k',
+                                                icon: Icons
+                                                    .monetization_on_outlined,
+                                                context: context,
+                                                id: 2),
+                                            focusedMenuItem(
+                                                controller:
+                                                    cubit.pricingController,
+                                                text: 'less 10k',
+                                                icon: Icons
+                                                    .monetization_on_outlined,
+                                                context: context,
+                                                id: 3),
+                                            focusedMenuItem(
+                                                controller:
+                                                    cubit.pricingController,
+                                                text: 'less 50k',
+                                                icon: Icons
+                                                    .monetization_on_outlined,
+                                                context: context,
+                                                id: 4),
+                                            focusedMenuItem(
+                                                controller:
+                                                    cubit.pricingController,
+                                                text: 'more',
+                                                icon: Icons
+                                                    .monetization_on_outlined,
+                                                context: context,
+                                                id: 5),
                                           ],
                                         ),
                                         border: InputBorder.none,
@@ -332,72 +469,79 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                           )),
                     )
                   ],
-                  onPageChanged: (int index){
-                    if(index==1){
-                    cubit.changeIsLast();
-                    }
+                  onPageChanged: (int index) {
+                  cubit.changeIsLast(index);
                   },
 
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.only(start: 30,end: 30,bottom: 20),
-                child: Row(children: [
-                  Padding(
-                    padding: EdgeInsets.all( 20),
-                    child: SmoothPageIndicator(
-                      controller:cubit. pageController,
-                      count: 2,
-                      effect: ExpandingDotsEffect(
-                        activeDotColor:Colors.grey[800]!,
-                        expansionFactor: 3,
-                        dotColor: Colors.grey,
-                        dotHeight: 6,
-
+                padding: const EdgeInsetsDirectional.only(
+                    start: 30, end: 30, bottom: 20),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(20),
+                      child: SmoothPageIndicator(
+                        controller: cubit.pageController,
+                        count: 2,
+                        effect: ExpandingDotsEffect(
+                          activeDotColor: Colors.grey[800]!,
+                          expansionFactor: 3,
+                          dotColor: Colors.grey,
+                          dotHeight: 6,
+                        ),
                       ),
                     ),
-                  ),
-                  Spacer(),
-                  FloatingActionButton(
-                      backgroundColor: Colors.grey,
-
-                      onPressed: ()async{
-                        if(cubit.isLast){
-                         CacheHelper.setData(key: 'setupDone', value: true)
-                             .then((value) async{
-                        cubit.workerSetUp(
-                            api_token: token!,
-                            category_id: categoryId != null? categoryId:null,
-                            lat: cubit.position!= null?cubit.position!.latitude:null,
-                            lng: cubit.position!= null?cubit.position!.longitude:null,
-                            job_title: cubit.jobitle.text!=null?cubit.jobitle.text:null,
-                            job_description: cubit.jobDiscription.text!=null?cubit.jobDiscription.text:null,
-                            gender:cubit.genderController.text != null ?cubit.genderController.text:null,
-                            filePath:cubit.profile !=null?cubit.profile!.path:null
-                        );
-                          print(await CacheHelper.getData(key: 'token'));
-
-                         });
-
-                        }else{
-                         cubit. pageController.nextPage(duration: Duration(milliseconds: 100), curve: Curves.easeIn);
-                        }
-                      },
-                      child:Icon(
-                        Icons.arrow_forward,
-                        color: Colors.white,
-                      )
-                  ),
-                ],),
+                    Spacer(),
+                    FloatingActionButton(
+                        backgroundColor: Colors.grey,
+                        onPressed: () async {
+                          if (cubit.isLast) {
+                            CacheHelper.setData(key: 'setupDone', value: true)
+                                .then((value) async {
+                              cubit.workerSetUp(
+                                  api_token: token!,
+                                  category_id:
+                                      categoryId != null ? categoryId : null,
+                                  lat: cubit.position != null
+                                      ? cubit.position!.latitude
+                                      : null,
+                                  lng: cubit.position != null
+                                      ? cubit.position!.longitude
+                                      : null,
+                                  job_title: cubit.jobitle.text != null
+                                      ? cubit.jobitle.text
+                                      : null,
+                                  job_description:
+                                      cubit.jobDiscription.text != null
+                                          ? cubit.jobDiscription.text
+                                          : null,
+                                  gender: cubit.genderController.text != null
+                                      ? cubit.genderController.text
+                                      : null,
+                                  filePath: cubit.profile != null
+                                      ? cubit.profile!.path:null
+                                      );
+                              print(await CacheHelper.getData(key: 'token'));
+                            });
+                          } else {
+                            cubit.pageController.nextPage(
+                                duration: Duration(milliseconds: 100),
+                                curve: Curves.easeIn);
+                          }
+                        },
+                        child: Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        )),
+                  ],
+                ),
               )
             ],
           ),
-
-
         );
-      }
-      ,
-
+      },
     );
   }
 }

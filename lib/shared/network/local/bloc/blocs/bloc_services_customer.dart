@@ -10,7 +10,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:iso_app_5/models/back_end/categories.dart';
+import 'package:iso_app_5/models/back_end/worker/getProfile.dart';
 import 'package:iso_app_5/models/customer/CustomerView.dart';
+import 'package:iso_app_5/models/customer/providersBelong.dart';
 import 'package:iso_app_5/modules/customer/categories.dart';
 import 'package:iso_app_5/modules/customer/home.dart';
 import 'package:iso_app_5/modules/customer/profile.dart';
@@ -93,18 +95,6 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
   LatLng? latLng;
   String? address;
   Categoriess? catItem;
-  getCategories(){
-  emit(GetCategoriesCustomerLoading());
-  DioClient.getData(url: 'categories')
-      .then((value) {
-     catItem= Categoriess.fromJson(value.data);
-    emit(GetCategoriesCustomerSuccess());
-  })
-      .catchError((onError){
-        print(onError);
-        emit(GetCategoriesCustomerError());
-  });
-}
   getAddress(Position position)async{
     Geocoder2.getDataFromCoordinates(
         latitude: position.latitude,
@@ -126,66 +116,34 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
 }
   List<String>appBarTitels=['home','categories','timline','profile'];
 
-  var ProfilePicker = ImagePicker();
-  File? profile;
-  var pickedImage;
-  Future<void> profilePickerCustomer() async {
-    emit(gerImageFromGalleryLoading());
-    pickedImage = await ProfilePicker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      profile =  File(pickedImage!.path);
-      CacheHelper.setData(key: 'profile',value: '${pickedImage!.path}').then((value) {
-
-        print('cached image suucessfully');
-        emit(gerImageFromGallerySuccess());
-      });
 
 
-
-    } else {
-      emit(gerImageFromGalleryError());
-      print('no image selected');
-    }
-  }
-
-  
-  void upDateProfile({required String token,required double lat, required double lng, required String gender,required String filePath})async{
-    emit(SetUpCustomerLoading());
-    customerProfile=await CacheHelper.getData(key: 'profile');
-    var formData=await FormData.fromMap(
-        {
-      'api_token': token,
-      'lat': lat,
-      'lng': lng,
-      'gender': gender,
-      'image': await MultipartFile.fromFile(filePath)
-    });
-    DioClient.post(path: 'customers/update_profile', data: formData)
-   .then((value) {
-     print(value.data);
-     getCustomer();
-      emit(SetUpCustomerSuccess());
-
-    })
-   .catchError((onError){
-     print(onError);
-      emit(SetUpCustomerError());
-    });
-  }
 
   CustomerView? customerView;
- void getCustomer(){
-    emit(getCustomerLoading());
+  void getCustomer(){
+    emit(GetCustomerLoading());
     DioClient.post(path: 'customers/profile', data: {'api_token':token})
         .then((value) {
-          customerView=CustomerView.fromJson(json:value.data);
-          print(value.data);
-          print('${customerView!.customer!.email}7777777777777');
-          emit(getCustomerSuccess());
+      customerView=CustomerView.fromJson(json:value.data);
+      print(value.data);
+      print('${customerView!.customer!.email}7777777777777');
+      emit(GetCustomerSuccess());
     })
         .catchError((onError){
-          print(onError);
-          emit(getCustomerError());
+      print(onError);
+      emit(GetCustomerError());
+    });
+  }
+  getCategories(){
+    emit(GetCategoriesCustomerLoading());
+    DioClient.getData(url: 'categories')
+        .then((value) {
+      catItem= Categoriess.fromJson(value.data);
+      emit(GetCategoriesCustomerSuccess());
+    })
+        .catchError((onError){
+      print(onError);
+      emit(GetCategoriesCustomerError());
     });
   }
   Widget homeCatItem({
@@ -266,6 +224,8 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
   );
 
   int Id=1;
+
+  ProvidersBelong? providersBelong;
  void getProvidersbelongToCategory({required int categoryId}){
    categoryId=this.Id;
    emit(getProvidersbelongToCategoryLoading());
@@ -275,14 +235,19 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
              'category':categoryId
            })
     .then((value){
-      print(value.data);
+
+      providersBelong=ProvidersBelong.fromJson(json: value.data);
+ // getMarkers(providerInfo: providersBelong!);
+      print('iam the provider belong ${}');
+      print(providersBelong!.data[2]!.lat);
+
      emit(getProvidersbelongToCategorySuccess());
    })
     .catchError((onError){
       print(onError);
       emit(getProvidersbelongToCategoryError());
 });
-} 
+}
  void getProvidersbelongToSubCategory({required int subCategoryId}){
    emit(getProvidersbelongToCategoryLoading());
    DioClient.post(path: 'customers/sub-category-providers', data:
@@ -299,5 +264,32 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
       emit(getProvidersbelongToCategoryError());
 });
 }
+  Set <Marker>getMarkers({required ProvidersBelong providerInfo}){
+    Set <Marker> markers=Set();
+    providerInfo.data.forEach((element) {
+      markers.add(
+          Marker(
+            markerId:MarkerId('${element.id}')
+            ,icon:BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)
+            ,position: LatLng(element.lat ??38.9071929,element.lng??-77.0368721)
+            ,onTap: (){}
+            ,infoWindow: InfoWindow(
+            title: '${element.first_name} ${element.last_name}',
+            snippet: '${element.job_title}',
+
+
+
+          ),
+
+
+          ));
+    });
+print('this is marker ${markers}');
+    return markers;
+
+  }
+
+
+
 
 }

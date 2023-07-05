@@ -11,7 +11,7 @@ class data {
   String? lastName;
   String? email;
   String? phone;
-
+  String?imageurl;
   String? gender;
   String? lat;
   String? lng;
@@ -28,7 +28,7 @@ class data {
     lastName = json['last_name'];
     email = json['email'];
     phone = json['phone'];
-
+    imageurl=json['imageurl'];
     gender = json['gender'];
     lat = json['lat'];
     lng = json['lng'];
