@@ -86,25 +86,28 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
       'email': email,
       'password': password,
     }).then((value) {
-      print(value.data);
+
       userLoginn = UserLogin.fromJson(json: value.data);
-      print(userLoginn!.api_token);
 
       if (userLoginn!.type == 0) {
+
         userLoginCustomer = UserLoginCustomer.fromJson(value.data);
 
         emit(UserLoginSuccess(userLogin: userLoginn!));
-        getCustomer();
+        getCustomer(token:userLoginCustomer!.user!.apiToken!);
       } else if (userLoginn!.type == 1) {
         userLoginModel = UserLoginModelWorker.fromJson(value.data);
+        print(userLoginModel!.user!.apiToken!.runtimeType);
+        print(userLoginModel!.user!.apiToken!);
         emit(UserLoginSuccess(userLogin: userLoginn!));
-        getProfileInfo();
+        getProfileInfo(token:userLoginModel!.user!.apiToken!);
+
       }
 
 
     }).catchError((onError) {
       emit(UserLoginError());
-      print('user login model${onError}');
+      print('user login ${onError}');
     });
   }
 
@@ -172,7 +175,7 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     ).then((value) {
       print(value);
       emit(WorkerSetUpSuccess());
-      getProfileInfo();
+      getProfileInfo(token: api_token);
     }).catchError((onError) {
       emit(WorkerSetUpError());
       print('!!!!!!!!!!!!${onError}');
@@ -205,7 +208,7 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
   }
   ProfileInfo? profileInfo;
 
-  void getProfileInfo() {
+  void getProfileInfo({required String token}) {
     emit(WorkerGetProfileInfoLoadingReg());
     DioClient.post(
       path: 'providers/profile',
@@ -214,7 +217,7 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
       profileInfo = ProfileInfo.fromJson(json: value.data);
       emit(WorkerGetProfileInfoSuccessReg());
     }).catchError((onError) {
-      print(onError);
+      print('يارب${onError}');
       emit(WorkerGetProfileInfoErrorReg());
     });
   }
@@ -262,6 +265,18 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
   }
 
 
+  void upDataOrderState({required int order_id,required int status}){
+    emit(updatStateWorkerLoading());
+    DioClient.post(path: 'path', data: {'api_token':token,'order_id':order_id,'status':status})
+        .then((value) {
+      emit(updatStateWorkerSuccess());
+      getProfileInfo(token: token);
+    })
+        .catchError((onError){
+      print(onError);
+      emit(updatStateWorkerError());
+    });
+  }
 
 
 
@@ -310,6 +325,7 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
       print(value.data);
       register = Register.fromJson(Json: value.data);
       emit(CustomerRegisterSuccess(1));
+
     }).catchError((onError) {
       print(onError);
       emit(CustomerRegisterError());
@@ -376,13 +392,12 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     });
   }
 
-  void getCustomer(){
+  void getCustomer({required String  token}){
     emit(getCustomerLoading());
     DioClient.post(path: 'customers/profile', data: {'api_token':token})
         .then((value) {
       customerView=CustomerView.fromJson(json:value.data);
-      print(value.data);
-      print('${customerView!.customer!.email}7777777777777');
+
       emit(getCustomerSuccess());
     })
         .catchError((onError){
@@ -404,7 +419,7 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
     DioClient.post(path: 'customers/update_profile', data: formData)
         .then((value) {
       print(value.data);
-      getCustomer();
+      getCustomer(token: token);
       emit(SetUpCustomerSuccess());
 
     })

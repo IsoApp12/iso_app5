@@ -63,11 +63,12 @@ class ProfileCustomr extends StatelessWidget {
                             backgroundColor: Colors.blue,
                           ),
                           CircleAvatar(
-                            radius: 75,
-                            backgroundImage:
-
-                            FileImage(File(customerProfile!) )as ImageProvider
-                          )
+                              radius: 75,
+                              backgroundImage:  cubit.customerView != null ?
+                              NetworkImage(cubit.customerView!.customer!.imageurl!):
+                              NetworkImage(
+                                  'https://th.bing.com/th/id/OIP.v4fJOAuz1Jx4wirUYOrn7AHaE8?pid=ImgDet&w=1024&h=683&rs=1') as ImageProvider
+                          ),
 
                         ],
                       ),

@@ -54,7 +54,7 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
     }
     emit(ChangeNavBarCustomer());
   }
- Future<void> enablePermission(context) async {
+  Future<void> enablePermission(context) async {
     try {
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
@@ -119,14 +119,14 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
 
 
 
+
   CustomerView? customerView;
   void getCustomer(){
     emit(GetCustomerLoading());
     DioClient.post(path: 'customers/profile', data: {'api_token':token})
         .then((value) {
       customerView=CustomerView.fromJson(json:value.data);
-      print(value.data);
-      print('${customerView!.customer!.email}7777777777777');
+
       emit(GetCustomerSuccess());
     })
         .catchError((onError){
@@ -237,17 +237,49 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
     .then((value){
 
       providersBelong=ProvidersBelong.fromJson(json: value.data);
- // getMarkers(providerInfo: providersBelong!);
-      print('iam the provider belong ${}');
-      print(providersBelong!.data[2]!.lat);
+      getMarkers(providerInfo: providersBelong!);
+
 
      emit(getProvidersbelongToCategorySuccess());
    })
     .catchError((onError){
       print(onError);
       emit(getProvidersbelongToCategoryError());
-});
-}
+    });
+  }
+  Set <Marker>getMarkers({required ProvidersBelong providerInfo})  {
+
+    try{
+      providerInfo.data.forEach((element) {
+        markers.add(
+            Marker(
+              markerId:MarkerId('${element.id}')
+              ,icon:BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)
+              ,position: LatLng(element.lat ??38.9071929,element.lng??-77.0368721)
+              ,onTap: (){}
+              ,infoWindow: InfoWindow(
+              title: '${element.first_name} ${element.last_name}',
+              snippet: '${element.job_title}',
+
+
+
+            ),
+
+
+            ));
+      });
+      print('this is marker ${markers}');
+      return markers;
+
+    }catch (onError){
+      print(onError);
+      return markers;
+    };
+
+
+  }
+
+  Set <Marker> markers=Set();
  void getProvidersbelongToSubCategory({required int subCategoryId}){
    emit(getProvidersbelongToCategoryLoading());
    DioClient.post(path: 'customers/sub-category-providers', data:
@@ -264,31 +296,18 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
       emit(getProvidersbelongToCategoryError());
 });
 }
-  Set <Marker>getMarkers({required ProvidersBelong providerInfo}){
-    Set <Marker> markers=Set();
-    providerInfo.data.forEach((element) {
-      markers.add(
-          Marker(
-            markerId:MarkerId('${element.id}')
-            ,icon:BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)
-            ,position: LatLng(element.lat ??38.9071929,element.lng??-77.0368721)
-            ,onTap: (){}
-            ,infoWindow: InfoWindow(
-            title: '${element.first_name} ${element.last_name}',
-            snippet: '${element.job_title}',
 
-
-
-          ),
-
-
-          ));
+  void sendOrders({required int provider_id}){
+    emit(SendOrdersLoading());
+    DioClient.post(path: 'path', data: {'api_token':token,'provider_id':provider_id})
+        .then((value) {
+      emit(SendOrdersSuccess());
+    })
+        .catchError((onError){
+      print(onError);
+      emit(SendOrdersrror());
     });
-print('this is marker ${markers}');
-    return markers;
-
   }
-
 
 
 

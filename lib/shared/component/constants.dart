@@ -1,6 +1,6 @@
 int? accountType;
 int? categoryId;
-String? token;
+String token='';
 bool? setTrue;
 String? customerProfile;
 

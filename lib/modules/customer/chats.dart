@@ -38,16 +38,128 @@ class chats extends StatelessWidget {
               height: 10,
 
             ),
-            ListView.separated(
+            // ListView.separated(
+            //
+            //   physics: NeverScrollableScrollPhysics(),
+            //     shrinkWrap: true,
+            //     itemBuilder: (context,index)=>chatItem(context), separatorBuilder:  (context,index)=>Container(
+            //   height: 1,
+            //   width: double.infinity,
+            //   color: Colors.grey,
+            //   padding: EdgeInsets.all(8),
+            // ), itemCount: 10)
+      Padding(
+        padding: const EdgeInsets.all(15),
+        child: InkWell(
+          onTap: (){
 
-              physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context,index)=>chatItem(context), separatorBuilder:  (context,index)=>Container(
-              height: 1,
-              width: double.infinity,
-              color: Colors.grey,
-              padding: EdgeInsets.all(8),
-            ), itemCount: 10)
+          },
+          child: Row(
+            children: [
+              CircleAvatar(
+                  radius: 20,
+                  backgroundImage:
+                  NetworkImage(
+                      'https://th.bing.com/th/id/OIP.v4fJOAuz1Jx4wirUYOrn7AHaE8?pid=ImgDet&w=1024&h=683&rs=1')),
+              SizedBox(width: 15),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Text('hend shoep',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w500),),
+                      SizedBox(width: 5,),
+                      CircleAvatar(
+                        radius:7,
+                        backgroundColor: Colors.blue,
+                        child: Center(child: Icon(Icons.done,size: 7,)),
+                      )
+                    ],
+                  ),
+
+                ],
+              ),
+
+            ],
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(15),
+        child: InkWell(
+          onTap: (){
+
+          },
+          child: Row(
+            children: [
+              CircleAvatar(
+                  radius: 20,
+                  backgroundImage:
+                  NetworkImage(
+                      'https://thumbs.dreamstime.com/x/child-autumn-park-having-fun-playing-walks-fresh-air-landscape-beautiful-scenic-place-leaves-101110352.jpg'
+                  )),
+              SizedBox(width: 15),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Text('aya eladl',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w500),),
+                      SizedBox(width: 5,),
+                      CircleAvatar(
+                        radius:7,
+                        backgroundColor: Colors.blue,
+                        child: Center(child: Icon(Icons.done,size: 7,)),
+                      )
+                    ],
+                  ),
+
+                ],
+              ),
+
+            ],
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(15),
+        child: InkWell(
+          onTap: (){
+
+          },
+          child: Row(
+            children: [
+              CircleAvatar(
+                  radius: 20,
+                  backgroundImage:
+                  NetworkImage(
+                      'https://th.bing.com/th/id/OIP.ZObbg3cJw2Jxf1VN7iu3kwHaE6?pid=ImgDet&rs=1')),
+              SizedBox(width: 15),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Text('alaa ali',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w500),),
+                      SizedBox(width: 5,),
+                      CircleAvatar(
+                        radius:7,
+                        backgroundColor: Colors.blue,
+                        child: Center(child: Icon(Icons.done,size: 7,)),
+                      )
+                    ],
+                  ),
+
+                ],
+              ),
+
+            ],
+          ),
+        ),
+      ),
 
           ],
         ),

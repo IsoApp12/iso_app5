@@ -30,11 +30,12 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
       // Permission not granted, show an error message
       throw Exception('Permission to make a phone call was not granted');
     }}
-  List<Widget> screens = [Orders(),HomeWorker(),ProfileWorkr()];
+  List<Widget> screens = [Orders(),HomeWorker(),ProfileWorker()];
   int currentIndex = 0;
   changenavBar(int x) {
    currentIndex = x;
    emit(ChangeNavBar());
+   getProfileInfo(token: token);
   }
   Future<void> enablePermission(context) async {
     try {
@@ -90,14 +91,13 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
 
 
   }
-  List<String>appBarTitels=['profile','orders','profile'];
-  void getProfileInfo(){
+  List<String>appBarTitels=['orders','home','profile'];
+  void getProfileInfo({required String token}){
     emit(WorkerGetProfileInfoLoading());
     DioClient.post(path: 'providers/profile', data: {'api_token':token},)
         .then((value) {
 
       profileInfo=ProfileInfo.fromJson(json: value.data);
-      print(profileInfo!.provider!.imageurl!);
       emit(WorkerGetProfileInfoSuccess());
 
     }).catchError((onError){

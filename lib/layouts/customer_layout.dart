@@ -22,7 +22,7 @@ class CustomerLayOut extends StatelessWidget {
       listener: (context,states){},
       builder: (context,states){
         var cubit=ServicesBlocCustomer.get(context);
-        cubit.customerView=this.customerView;
+       cubit.customerView=this.customerView;
         return SafeArea(
           child: Scaffold(
             key: scaffoldKey,

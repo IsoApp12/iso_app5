@@ -14,7 +14,8 @@ import 'package:iso_app_5/shared/network/local/bloc/states/states_services_custo
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
 
 class CustomrTracking extends StatelessWidget {
-  CustomrTracking({Key? key}) : super(key: key);
+  LatLng latLng;
+  CustomrTracking({Key? key,required this.latLng}) : super(key: key);
   TextEditingController addressController = TextEditingController();
 
   @override
@@ -24,7 +25,7 @@ class CustomrTracking extends StatelessWidget {
       markers.add(Marker(
         markerId: MarkerId('1'),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
-        position: LatLng(38.9071932, -77.0368727),
+        position: LatLng(38.91113621684343, -77.0109083465112),
         onTap: () {},
         infoWindow: InfoWindow(
             title: 'cairo ,nasr city 6th street ',
@@ -112,19 +113,23 @@ class CustomrTracking extends StatelessWidget {
           markerId: MarkerId('2'),
           icon:
               BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
-          position: LatLng(38.8971932, -77.0368727),
+          position: this.latLng,
           onTap: () {
             //  Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileWorkr()));
           }));
-      markers.add(Marker(
-        markerId: MarkerId('3'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
-        position: LatLng(38.1071932, -77.10368727),
-        onTap: () {
-          //  Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileWorkr()));
-        },
-      ));
+
       return markers;
+    }
+    Set<Polyline> setPolyGon() {
+      Set<Polyline> polylines = Set();
+      polylines.add(
+          Polyline(
+        polylineId: PolylineId('1'),
+        color: Colors.black,
+
+        points: [ LatLng(38.9071932, -77.0368727),latLng],));
+
+      return polylines;
     }
 
     GoogleMapController? _controller;
@@ -145,10 +150,11 @@ class CustomrTracking extends StatelessWidget {
           body: Stack(
             children: [
               GoogleMap(
+                polylines: setPolyGon(),
                 zoomControlsEnabled: false,
                 markers: getMarkers(),
                 initialCameraPosition:
-                    CameraPosition(target: cubit.latLng!, zoom: 18),
+                    CameraPosition(target: cubit.latLng!, zoom: 13),
                 onMapCreated: (GoogleMapController controller) {
                   _controller = controller;
                   setMapStyle();

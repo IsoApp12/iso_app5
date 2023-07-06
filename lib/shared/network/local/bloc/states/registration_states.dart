@@ -67,3 +67,6 @@ class GetsetupCustomerLocationSuccess extends RegistrationStates{}
 class CustomerAdressSuccess extends RegistrationStates{}
 class CustomerAdressError extends RegistrationStates{}
 
+class updatStateWorkerLoading extends RegistrationStates{}
+class updatStateWorkerSuccess extends RegistrationStates{}
+class updatStateWorkerError extends RegistrationStates{}

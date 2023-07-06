@@ -2,24 +2,39 @@ import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icon_broken/icon_broken.dart';
+import 'package:iso_app_5/models/back_end/worker/getProfile.dart';
+import 'package:iso_app_5/shared/component/constants.dart';
+import 'package:iso_app_5/shared/component/widgets/blocks.dart';
 import 'package:iso_app_5/shared/network/local/bloc/blocs/bloc_services_worker.dart';
+import 'package:iso_app_5/shared/network/local/bloc/blocs/registration_bloc.dart';
+import 'package:iso_app_5/shared/network/local/bloc/states/registration_states.dart';
 import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
 class Orders extends StatelessWidget {
   Orders({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ServicesBlocWorker,ServicesStatesWorker>(
+    return BlocConsumer<ServicesBlocRegistration,RegistrationStates>(
       listener: (context,states){
 
       },
       builder: (context,states){
+        var cubit=ServicesBlocRegistration.get(context);
+
         return SafeArea(
           child: Scaffold(
-            body:ListView.separated(
-                 itemBuilder: (context,index)=> orderItem()
-                 , separatorBuilder: (context,index)=>SizedBox(height: 10,)
-                 , itemCount: 10),
+            body:Column(
+              children: [
+               Expanded(
+                 child: ListView.separated(
+                     scrollDirection: Axis.vertical,
+                     itemBuilder: (context,index)=>orderItem(cubit.profileInfo!,index,context)
+                     , separatorBuilder: (context,index)=>itemSeparator()
+                     , itemCount:cubit.profileInfo!.provider!.orders.length ),
+               )
+
+              ],
+            )
 
           ),
         );
@@ -28,12 +43,12 @@ class Orders extends StatelessWidget {
 
     ) ;
   }
-  orderItem()=>Padding(
+  orderItem(ProfileInfo profileInfo,index,context)=> Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
       padding: EdgeInsetsDirectional.only(start: 20,end: 20),
       width: double.infinity,
-      height: 160,
+      height: 120,
       decoration: BoxDecoration(
         boxShadow: [BoxShadow(
           color: Colors.grey.withOpacity(0.5),
@@ -51,15 +66,15 @@ class Orders extends StatelessWidget {
             child: Column(
               children: [
                 CircleAvatar(
-                  radius:45,
-                  backgroundImage:
-                  NetworkImage('https://th.bing.com/th/id/OIP.qyUk3-mfQGIGBUlcjKYJygHaG6?pid=ImgDet&rs=1')
-                ),
-                SizedBox(height: 15,),
-                Text('hend shoep', style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),)
+                    radius:45,
+                    backgroundImage:
+                    profileInfo.provider!.orders[index].customer!.imageurl !=null?
+                    NetworkImage('${profileInfo.provider!.orders[index].customer!.imageurl!}') :
+                    NetworkImage(
+                        'https://th.bing.com/th/id/OIP.v4fJOAuz1Jx4wirUYOrn7AHaE8?pid=ImgDet&w=1024&h=683&rs=1') as ImageProvider
+            )
+
+
               ],
             ),
           ),
@@ -74,42 +89,34 @@ class Orders extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Expanded(
-                        child: Text('Order title',overflow: TextOverflow.ellipsis,style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),),
+                      Text('${profileInfo.provider!.orders[index].customer!.first_name} ${profileInfo.provider!.orders[index].customer!.last_name}'
                       ),
-                      IconButton(onPressed: (){}, icon: Icon(IconBroken.Delete))
+                      SizedBox(width: 60,),
+                      TextButton(onPressed: (){
+                        ServicesBlocRegistration
+                            .get(context)
+                            .upDataOrderState(
+                            order_id: profileInfo.provider!.orders[index].id
+                            , status: 1);
+                      }, child: Container(
+                        padding: EdgeInsets.all(10),
+                        child: Text('accept',style:TextStyle(color: Colors.white)),decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.redAccent),)),
+                      TextButton(onPressed: (){
+                        ServicesBlocRegistration
+                            .get(context)
+                            .upDataOrderState(
+                            order_id: profileInfo.provider!.orders[index].id
+                            , status: 3);
+                      }, child: Container(
+                        padding: EdgeInsets.all(10),
+                        child: Text('cancel',style:TextStyle(color: Colors.white)),decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.blueGrey),)),
                     ],
                   ),
-                  SizedBox(height: 5,),
-                  Expanded(
-                    child: Text('this is the order desription',overflow: TextOverflow.ellipsis, style: TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.grey[600],
-                    ),),
-                  ),
                   SizedBox(height: 3,),
-                  Container(
-                    height: 15,
-                    child: Row(
-                      textBaseline:TextBaseline.alphabetic ,
-                      children: [
-                        Expanded(
-                          child: Text('egypt cairo ,140 seventh ditrict ',overflow: TextOverflow.ellipsis, style: TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.grey[600],
-                          ),),
-                        ),
-                        SizedBox(width: 10,),
-                        IconButton(
-                            padding: EdgeInsets.all(0.0),
-                            splashRadius: .1,
-                            onPressed: (){}, icon: Icon(IconBroken.Location,color: Colors.red[300],size: 20,))
-                      ],
-                    ),
-                  ),
+                   profileInfo.provider!.orders[index]!.customer!.address !=null?
+                  Text('${profileInfo.provider!.orders[index]!.customer!.address!}',overflow: TextOverflow.ellipsis,):
+                  Text('no address')
+                  ,
                   SizedBox(height: 3,),
                   Row(
                     children: [
@@ -120,22 +127,25 @@ class Orders extends StatelessWidget {
                             textBaseline:TextBaseline.alphabetic ,
                             children: [
                               Expanded(
-                                child: Text('16 - 05 -2023 16:00', style: TextStyle(
+                                child: Text('${profileInfo.provider!.orders[index]!.date}', style: TextStyle(
                                   fontSize: 14.0,
                                   color: Colors.grey[600],
-                                ),),
+                                ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               IconButton(
+
                                   splashRadius: .1,
                                   padding: EdgeInsets.all(0.0),
                                   onPressed: (){}, icon: Icon(
 
-                                IconBroken.Calendar,color: Colors.green[300],size: 20,))
+                                IconBroken.Calendar,color: Colors.green[300],size: 20,)),
+
                             ],
                           ),
                         ),
                       ),
-                      TextButton(onPressed: (){}, child: Text('accept')),
                     ],
                   ),
                 ],
@@ -146,6 +156,10 @@ class Orders extends StatelessWidget {
       ),
     ),
   );
+  // ListView.separated(
+  // itemBuilder: (context,index)=> orderItem()
+  // , separatorBuilder: (context,index)=>SizedBox(height: 10,)
+  // , itemCount: 10),
 }
 
 

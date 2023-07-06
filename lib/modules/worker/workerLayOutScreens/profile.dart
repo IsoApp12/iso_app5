@@ -9,8 +9,8 @@ import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worke
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
-class ProfileWorkr extends StatelessWidget {
-  ProfileWorkr({Key? key}) : super(key: key);
+class ProfileWorker extends StatelessWidget {
+  ProfileWorker({Key? key}) : super(key: key);
   GlobalKey<ScaffoldState> key2 = GlobalKey();
   @override
   Widget build(BuildContext context) {

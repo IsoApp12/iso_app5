@@ -22,7 +22,11 @@ class SetUpCustomer extends StatelessWidget {
     return BlocConsumer<ServicesBlocRegistration,RegistrationStates>(
       listener: (context,state){
         if(state is SetUpCustomerSuccess){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerLayOut(customerView:ServicesBlocRegistration.get(context).customerView ,)));
+
+          Navigator.push(context,
+              MaterialPageRoute(
+                  builder: (context)=>
+                      CustomerLayOut(customerView:ServicesBlocRegistration.get(context).customerView ,)));
         }
       },
       builder: (context,state){
@@ -35,7 +39,7 @@ class SetUpCustomer extends StatelessWidget {
         actions: [
           TextButton(onPressed: (){
            CacheHelper.setData(key: 'setupDone', value: true).then((value) {
-              cubit.getCustomer();
+              cubit.getCustomer(token: token!);
              Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerLayOut(customerView: cubit.customerView,)));
            });
           }, child: Text('skip',style: TextStyle(color: Colors.blueGrey),))
@@ -73,9 +77,10 @@ class SetUpCustomer extends StatelessWidget {
                                 children: [
                                   CircleAvatar(
                                     radius: 50,
-                                    backgroundImage:  cubit.customerView != null ?
+                                    backgroundImage:
+                                    cubit.profileCustomer != null ? FileImage(File(cubit.profileCustomer!.path!)):
+                                    cubit.customerView != null ?
                                     NetworkImage(cubit.customerView!.customer!.imageurl!):
-                                    cubit.profile != null?FileImage(File(cubit.profileCustomer!.path!)):
                                     NetworkImage(
                                         'https://th.bing.com/th/id/OIP.v4fJOAuz1Jx4wirUYOrn7AHaE8?pid=ImgDet&w=1024&h=683&rs=1') as ImageProvider
                                   ),

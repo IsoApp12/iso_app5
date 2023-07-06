@@ -1,3 +1,4 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
@@ -25,24 +26,25 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ServicesBlocRegistration,RegistrationStates>(
       listener: (context,states){
-        if(states is  UserLoginSuccess){
+        var cubit =ServicesBlocRegistration.get(context);
+        if(states is  WorkerGetProfileInfoSuccessReg ||states is   getCustomerSuccess && cubit.userLoginn !=null){
 
-       if( states.userLogin.type==0){
+       if(cubit .userLoginn!.type==0){
 
-      CacheHelper.setData(key: 'type', value: 0).then((value){
-        accountType=0;
-        CacheHelper.setData(key: 'token', value: '${states.userLogin.api_token}').then((value) {
-          token=states.userLogin.api_token;
+      CacheHelper.setData(key: 'type', value: 0).then((value)async{
+        accountType=await CacheHelper.getData(key: 'type');
+        CacheHelper.setData(key: 'token', value: '${cubit.userLoginn!.api_token}').then((value)async {
+          token=await CacheHelper.getData(key: 'token');
           Navigator.push(context, MaterialPageRoute(builder: (context)=>SetUpCustomer()));
         });
       } );
-       }else  if( states.userLogin.type==1){
+       }else  if( cubit.userLoginn!.type==1){
 
-        CacheHelper.setData(key: 'type', value: 1).then((value) {
-          accountType=0;
-          CacheHelper.setData(key: 'token', value: '${states.userLogin.api_token}')
+        CacheHelper.setData(key: 'type', value: 1).then((value) async{
+          accountType=await CacheHelper.getData(key: 'type');
+          CacheHelper.setData(key: 'token', value: '${cubit.userLoginn!.api_token}')
               .then((value) async{
-            token=states.userLogin.api_token;
+            token=await CacheHelper.getData(key: 'token');
             Navigator.push(context, MaterialPageRoute(builder: (context)=>SetUpWorker()));
 
           });
@@ -68,7 +70,6 @@ class LoginScreen extends StatelessWidget {
       },
       builder: (context,states){
         return SafeArea(
-
           child: Scaffold(
 
             backgroundColor: Colors.grey[100],

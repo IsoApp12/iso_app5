@@ -43,7 +43,6 @@ class _HomeCustomerState extends State<HomeCustomer> {
       },
       builder: (context,states){
         var cubit=ServicesBlocCustomer.get(context);
-
         return SafeArea(
           child: Scaffold(
             body:ConditionalBuilder(
@@ -51,7 +50,7 @@ class _HomeCustomerState extends State<HomeCustomer> {
                 alignment: Alignment.bottomCenter,
                 children: [
                   GoogleMap(
-
+                    markers: cubit.markers != null ?  cubit.markers:Set<Marker>(),
                     initialCameraPosition: CameraPosition(
                         target: cubit.latLng!,zoom: 8),
                     onMapCreated: (GoogleMapController controller) {
@@ -63,6 +62,7 @@ class _HomeCustomerState extends State<HomeCustomer> {
 
                   ),
                   CarouselSlider.builder(
+
                     itemBuilder: (context,index,x)=> cubit.homeCatItem(index:index,context:context,categoryModel:cubit.catItem!,images: cubit.iamges,Id: cubit.Id),
                     itemCount: cubit.catItem!.categories!.length,
                     disableGesture: false,
@@ -73,6 +73,7 @@ class _HomeCustomerState extends State<HomeCustomer> {
                         initialPage: 1,
                         reverse: true
                     ),
+
                   ),
                   Positioned(
                       top:80 ,

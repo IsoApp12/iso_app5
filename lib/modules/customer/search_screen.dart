@@ -73,7 +73,7 @@ TextEditingController addressController=TextEditingController();
                           )),
                           SizedBox(width: 10,),
                           IconButton(onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomrTracking()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomrTracking(latLng: LatLng(38.9071932, -77.0368727),)));
                           }, icon: Icon(Icons.location_on,size: 40,color: Colors.white,))
 
 

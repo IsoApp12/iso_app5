@@ -19,9 +19,7 @@ class LogOutError extends ServicesStatesCustomer{}
 class gerImageFromGalleryLoading extends ServicesStatesCustomer{}
 class gerImageFromGallerySuccess extends ServicesStatesCustomer{}
 class gerImageFromGalleryError extends ServicesStatesCustomer{}
-// class SetUpCustomerSuccess extends ServicesStatesCustomer{}
-// class SetUpCustomerLoading extends ServicesStatesCustomer{}
-// class SetUpCustomerError extends ServicesStatesCustomer{}
+
 class GetCustomerSuccess extends ServicesStatesCustomer{}
 class GetCustomerLoading extends ServicesStatesCustomer{}
 class GetCustomerError extends ServicesStatesCustomer{}
@@ -30,3 +28,6 @@ class getProvidersbelongToCategoryLoading extends ServicesStatesCustomer{}
 class getProvidersbelongToCategorySuccess extends ServicesStatesCustomer{}
 class getProvidersbelongToCategoryError extends ServicesStatesCustomer{}
 
+class SendOrdersLoading extends ServicesStatesCustomer{}
+class SendOrdersSuccess extends ServicesStatesCustomer{}
+class SendOrdersrror extends ServicesStatesCustomer{}

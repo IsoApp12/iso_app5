@@ -10,19 +10,20 @@ ProfileInfo.fromJson({required Map<String,dynamic>json}){
 
 
 class Provider{
-  int? id;
-  String? first_name;
-  String? last_name;
-  String? email;
-  String? phone;
-  String? address;
-  String? job_title;
-  String? job_description;
-  String? gender;
+  dynamic? id;
+  dynamic? first_name;
+  dynamic? last_name;
+  dynamic? email;
+  dynamic? phone;
+  dynamic? address;
+  dynamic? job_title;
+  dynamic? job_description;
+  dynamic? gender;
+  dynamic? api_token;
   dynamic lat;
   dynamic lng;
-  String? imageurl;
-  String? category;
+  dynamic? imageurl;
+  dynamic? category;
   List <Order> orders=[];
   Provider.fromJson({required Map<String,dynamic>json}){
     this.id=json['id'];
@@ -32,6 +33,7 @@ class Provider{
     this.address=json['address'];
     this.job_title=json['job_title'];
     this.job_description=json['job_description'];
+    this.api_token=json['api_token'];
     this.lat=json['lat'];
     this.lng=json['lng'];
     this.phone=json['lng'];
@@ -44,11 +46,11 @@ class Provider{
 }
 
 class Order{
-  int? id ;
-  int? customer_id ;
-  int? provider_id ;
+  dynamic? id ;
+  dynamic? customer_id ;
+  dynamic? provider_id ;
   String? date ;
-  int? status ;
+  dynamic? status ;
   String? created_at ;
   Customer ? customer;
   Order.fromJson({required Map <String,dynamic>json}){
@@ -58,14 +60,14 @@ class Order{
     this.date=json['date'];
     this.status=json['status'];
     this.created_at=json['created_at'];
-    this.customer=json['customer'];
+    this.customer=json['customer']!=null?Customer.fromJson(json: json['customer']):null;
   }
 
 }
 
 
 class Customer{
-  int? id ;
+  dynamic? id ;
   String? first_name ;
   String? last_name ;
   String? email ;

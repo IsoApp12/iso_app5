@@ -388,3 +388,39 @@ Widget itemSeparator()=>Padding(
   padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
   child:   Container(height: 1,width: double.infinity,color: Colors.grey[400],),
 );
+Widget buildMyMessges()=> Align(
+  alignment: AlignmentDirectional.centerEnd,
+  child: Padding(
+    padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
+    child: Container(
+      padding: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+          color: Colors.blueGrey[100],
+          borderRadius: BorderRadiusDirectional.only(
+              topEnd:Radius.circular(30) ,
+              topStart: Radius.circular(30),
+              bottomStart: Radius.circular(30)
+          )
+      ),
+      child: Text('fine ,what for you'),
+    ),
+  ),
+);
+Widget buildMessges()=> Align(
+  alignment: AlignmentDirectional.centerStart,
+  child: Padding(
+    padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
+    child: Container(
+      padding: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+          color: Colors.blueGrey[100],
+          borderRadius: BorderRadiusDirectional.only(
+              topEnd:Radius.circular(30) ,
+              topStart: Radius.circular(30),
+              bottomStart: Radius.circular(30)
+          )
+      ),
+      child: Text('hello ,whats up'),
+    ),
+  ),
+);

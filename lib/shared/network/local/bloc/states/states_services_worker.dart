@@ -13,3 +13,5 @@ class WorkerGetProfileInfoSuccess extends ServicesStatesWorker{}
 class WorkerGetProfileInfoError extends ServicesStatesWorker{}
 class WorkerGetProfileInfoLoading extends ServicesStatesWorker{}
 
+
+
