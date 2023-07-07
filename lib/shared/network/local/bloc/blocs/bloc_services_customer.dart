@@ -299,15 +299,27 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
 
   void sendOrders({required int provider_id}){
     emit(SendOrdersLoading());
-    DioClient.post(path: 'path', data: {'api_token':token,'provider_id':provider_id})
+    DioClient.post(path: 'customers/new-order', data: {'api_token':token,'provider_id':provider_id})
         .then((value) {
       emit(SendOrdersSuccess());
     })
         .catchError((onError){
       print(onError);
-      emit(SendOrdersrror());
+      emit(SendOrdersError());
     });
   }
+  void getProviderInfo({required int provider_id}){
+    emit(SendOrdersLoading());
+    DioClient.post(path: 'customers/provider', data: {'api_token':token,'provider_id':provider_id})
+        .then((value) {
+      emit(getProviderAccountsSuccess());
+    })
+        .catchError((onError){
+      print(onError);
+      emit(getProviderAccountsError());
+    });
+  }
+
 
 
 

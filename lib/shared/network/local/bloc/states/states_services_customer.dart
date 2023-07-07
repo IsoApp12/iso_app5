@@ -30,4 +30,6 @@ class getProvidersbelongToCategoryError extends ServicesStatesCustomer{}
 
 class SendOrdersLoading extends ServicesStatesCustomer{}
 class SendOrdersSuccess extends ServicesStatesCustomer{}
-class SendOrdersrror extends ServicesStatesCustomer{}
+class SendOrdersError extends ServicesStatesCustomer{}
+class getProviderAccountsSuccess extends ServicesStatesCustomer{}
+class getProviderAccountsError extends ServicesStatesCustomer{}

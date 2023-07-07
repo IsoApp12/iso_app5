@@ -515,6 +515,7 @@ class _SetUpWorkerState extends State<SetUpWorker> {
                                   lng: cubit.position != null
                                       ? cubit.position!.longitude
                                       : null,
+                                  address: cubit.addressController.text??'no address',
                                   job_title: cubit.jobitle.text != null
                                       ? cubit.jobitle.text
                                       : null,
