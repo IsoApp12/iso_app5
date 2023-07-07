@@ -74,30 +74,33 @@ class ServicesBlocWorker extends Cubit<ServicesStatesWorker> {
   }
   String? address;
   ProfileInfo? profileInfo;
-  getAddress(Position position)async{
+  getAddress(Position? position,{double?lat,double ?lng})async{
     Geocoder2.getDataFromCoordinates(
-        latitude: position.latitude,
-        longitude:position.longitude,
+        latitude: position?.latitude ?? lat!,
+        longitude:position?.longitude ??lng!,
         googleMapApiKey: "AIzaSyCbXXQLWMo8mIdDAd_gh9daaeYKx0G-mCc").then((value) {
       address=value.address;
 
       emit(GetAddressWorkerSuccess());
+      return address.toString();
     }).catchError((onError)
     {
       print(onError);
       emit(GetAddressWorkerError());
-
+ return null;
     });
 
-
+  return address??null;
   }
   List<String>appBarTitels=['orders','home','profile'];
+  dynamic rateSum=0;
   void getProfileInfo({required String token}){
     emit(WorkerGetProfileInfoLoading());
     DioClient.post(path: 'providers/profile', data: {'api_token':token},)
         .then((value) {
 
       profileInfo=ProfileInfo.fromJson(json: value.data);
+
       emit(WorkerGetProfileInfoSuccess());
 
     }).catchError((onError){

@@ -10,18 +10,21 @@
 // import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worker.dart';
 // import 'package:url_launcher/url_launcher.dart';
 // import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+// import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 //
-// class ProviderView extends StatelessWidget {
-//   ProviderView({Key? key}) : super(key: key);
+// class CustomerProvider extends StatelessWidget {
+//   CustomerProvider({Key? key}) : super(key: key);
 //   GlobalKey<ScaffoldState> key2 = GlobalKey();
 //   @override
 //   Widget build(BuildContext context) {
 //     return BlocConsumer<ServicesBlocCustomer,ServicesStatesCustomer>(
-//       listener: (context,state){},
-//       builder: (context,state){
+//       listener: (context,states){
+//       },
+//       builder: (context,states){
 //         var cubit=ServicesBlocCustomer.get(context);
 //         return SafeArea(
 //           child: Scaffold(
+//
 //             body: Padding(
 //               padding: const EdgeInsets.all(8.0),
 //               child: Container(
@@ -40,41 +43,108 @@
 //                 ),
 //                 child: Container(
 //                   height: double.infinity,
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.center,
-//                     children: [
-//                       CircleAvatar(
-//                         backgroundImage:  NetworkImage('${cubit.profileInfo!.provider!.imageurl}'),
-//                         radius: 90,
-//                       ),
-//                       SizedBox(height: 10,),
-//                       Text(
-//                         '${cubit.profileInfo!.provider!.first_name}${cubit.profileInfo!.provider!.last_name}',
-//                         overflow: TextOverflow.ellipsis,
-//                         style: TextStyle(
-//                           fontSize: 18.0,
-//                           fontWeight: FontWeight.bold,
+//                   child: SingleChildScrollView(
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.center,
+//                       children: [
+//                         CircleAvatar(
+//                           backgroundImage:  NetworkImage('${cubit.profileInfo!.provider!.imageurl}'),
+//                           radius: 90,
 //                         ),
-//                       ),
-//                       SizedBox(
-//                         height: 10,
-//                       ),
-//                       Text(
-//                         '${cubit.profileInfo!.provider!.email}',
-//                         overflow: TextOverflow.ellipsis,
-//                         style: TextStyle(
-//                           fontSize: 14.0,
-//                           color: Colors.grey[600],
+//                         SizedBox(height: 10,),
+//                         Text(
+//                           '${cubit.profileInfo!.provider!.first_name}${cubit.profileInfo!.provider!.last_name}',
+//                           overflow: TextOverflow.ellipsis,
+//                           style: TextStyle(
+//                             fontSize: 18.0,
+//                             fontWeight: FontWeight.bold,
+//                           ),
 //                         ),
-//                       ),
-//                       Row(
-//                         mainAxisAlignment: MainAxisAlignment.start,
-//                         children: [
+//                         SizedBox(
+//                           height: 10,
+//                         ),
+//                         Text(
+//                           '${cubit.profileInfo!.provider!.email}',
+//                           overflow: TextOverflow.ellipsis,
+//                           style: TextStyle(
+//                             fontSize: 14.0,
+//                             color: Colors.grey[600],
+//                           ),
+//                         ),
+//                         Row(
+//                           mainAxisAlignment: MainAxisAlignment.start,
+//                           children: [
 //
-//                         ],
-//                       )
+//                           ],
+//                         ),
+//                         RatingBarIndicator(
+//                           rating: 3,
+//                           itemBuilder: (context, index) => Icon(
+//                             Icons.star,
+//                             color: Colors.amber,
+//                           ),
+//                           itemCount: 5,
+//                           itemSize: 25.0,
+//                           direction: Axis.horizontal,
+//                         ),
+//                         SizedBox(height: 10,),
+//                         Row(
+//                           mainAxisAlignment: MainAxisAlignment.center,
+//                           children: [
+//                             GestureDetector(
+//                               onTap: (){},
+//                               child: Container(
+//                                 padding: EdgeInsets.all(10),
+//                                 child: Text('order',style: TextStyle(color: Colors.white,fontSize: 18),),
+//                                 decoration: BoxDecoration(
+//                                     color: Colors.blueGrey,
+//                                     borderRadius: BorderRadius.circular(10)
+//                                 ),
+//                               ),
+//                             ),
+//                             SizedBox(width: 15,),
+//                             GestureDetector(
+//                               onTap: (){},
+//                               child: Container(
+//                                 padding: EdgeInsets.all(10),
+//                                 child: Text('messege',style: TextStyle(color: Colors.white,fontSize: 18),),
+//                                 decoration: BoxDecoration(
+//                                     color: Colors.blueGrey,
+//                                     borderRadius: BorderRadius.circular(10)
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                         SizedBox(height: 20,),
+//                         Column(
+//                           mainAxisAlignment: MainAxisAlignment.start,
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Text('Job Title',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+//                             SizedBox(height: 20,),
+//                             Text('job description',style: TextStyle(fontSize: 18),),
+//                             SizedBox(height: 20,),
+//                             Row(
+//                               children: [
+//                                 Text('phone number'),
+//                                 SizedBox(width: 20,),
+//                                 Icon(IconBroken.Call)
+//                               ],
+//                             ),
+//                             SizedBox(height: 20,),
+//                             Row(
+//                               children: [
+//                                 Text('address'),
+//                                 SizedBox(width: 20,),
+//                                 Icon(IconBroken.Location)
+//                               ],
+//                             ),
+//                           ],
+//                         )
 //
-//                     ],
+//                       ],
+//                     ),
 //                   ),
 //                 ),
 //               ),
@@ -83,8 +153,9 @@
 //           ),
 //         );
 //       },
-//     );
 //
+//
+//     ) ;
 //   }
 // }
 //
