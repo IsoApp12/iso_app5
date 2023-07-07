@@ -104,7 +104,6 @@ class CustomerLayOut extends StatelessWidget {
               items: [
               BottomNavigationBarItem(icon: Icon(IconBroken.Home),label: 'Home'),
               BottomNavigationBarItem(icon: Icon(IconBroken.Category),label: 'Categories'),
-              BottomNavigationBarItem(icon: Icon(IconBroken.Chart),label: 'TimeLine'),
               BottomNavigationBarItem(icon: Icon(IconBroken.Profile),label: 'profile'),
             ],
               onTap: (int x){

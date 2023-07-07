@@ -102,7 +102,7 @@ class WorkerLatOut extends StatelessWidget {
               currentIndex: cubit.currentIndex,
               items: [
                 BottomNavigationBarItem(icon: Icon(IconBroken.Chart),label: 'Orders'),
-                BottomNavigationBarItem(icon: Icon(IconBroken.Home),label: 'Home'),
+                BottomNavigationBarItem(icon: Icon(IconBroken.Home),label: 'chats'),
                 BottomNavigationBarItem(icon: Icon(IconBroken.Profile),label: 'profile'),
                       ],
               onTap: (int x){

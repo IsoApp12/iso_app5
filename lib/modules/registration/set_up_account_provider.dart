@@ -30,13 +30,16 @@ class _SetUpWorkerState extends State<SetUpWorker> {
     return BlocConsumer<ServicesBlocRegistration, RegistrationStates>(
       listener: (context, state) {
         if (state is WorkerSetUpSuccess) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => WorkerLatOut(
-                        profileInfo:
-                            ServicesBlocRegistration.get(context).profileInfo,
-                      )));
+         Navigator.pushAndRemoveUntil(
+
+             context,
+             MaterialPageRoute(
+                 builder: (context) => WorkerLatOut(
+                   profileInfo:
+                   ServicesBlocRegistration.get(context).profileInfo,
+                 )),
+           (route) => false,
+         );
         }
       },
       builder: (context, state) {

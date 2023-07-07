@@ -23,10 +23,15 @@ class SetUpCustomer extends StatelessWidget {
       listener: (context,state){
         if(state is SetUpCustomerSuccess){
 
-          Navigator.push(context,
+          Navigator.pushAndRemoveUntil(
+              context,
               MaterialPageRoute(
                   builder: (context)=>
-                      CustomerLayOut(customerView:ServicesBlocRegistration.get(context).customerView ,)));
+                      CustomerLayOut(customerView:ServicesBlocRegistration.get(context).customerView ,)),
+                (route) => false,
+
+
+          );
         }
       },
       builder: (context,state){
@@ -40,6 +45,7 @@ class SetUpCustomer extends StatelessWidget {
           TextButton(onPressed: (){
            CacheHelper.setData(key: 'setupDone', value: true).then((value) {
               cubit.getCustomer(token: token!);
+              print(cubit.customerView!.customer!.imageurl!);
              Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerLayOut(customerView: cubit.customerView,)));
            });
           }, child: Text('skip',style: TextStyle(color: Colors.blueGrey),))
@@ -78,8 +84,9 @@ class SetUpCustomer extends StatelessWidget {
                                   CircleAvatar(
                                     radius: 50,
                                     backgroundImage:
-                                    cubit.profileCustomer != null ? FileImage(File(cubit.profileCustomer!.path!)):
-                                    cubit.customerView != null ?
+                                    cubit.profileCustomer != null ?
+                                    FileImage(File(cubit.profileCustomer!.path!)):
+                                    cubit.customerView != null&&cubit.customerView!.customer!.imageurl !=null ?
                                     NetworkImage(cubit.customerView!.customer!.imageurl!):
                                     NetworkImage(
                                         'https://th.bing.com/th/id/OIP.v4fJOAuz1Jx4wirUYOrn7AHaE8?pid=ImgDet&w=1024&h=683&rs=1') as ImageProvider

@@ -29,7 +29,7 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
   ServicesBlocCustomer() : super(InitialStateCustomer());
   static ServicesBlocCustomer get(context) => BlocProvider.of(context);
 
-  List<Widget> screens = [HomeCustomer(),Categories(),TimeLine(),ProfileCustomr()];
+  List<Widget> screens = [HomeCustomer(),Categories(),ProfileCustomr()];
   TextEditingController addressController=TextEditingController();
   TextEditingController nameController=TextEditingController();
   TextEditingController genderController=TextEditingController();
@@ -47,11 +47,7 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
   int currentIndex = 0;
   changenavBar(int x)async {
     currentIndex = x;
-    if(x==3){
-      token=await CacheHelper.getData(key: 'token');
-
-
-    }
+    getCustomer();
     emit(ChangeNavBarCustomer());
   }
   Future<void> enablePermission(context) async {
@@ -114,7 +110,7 @@ class ServicesBlocCustomer extends Cubit<ServicesStatesCustomer> {
 
 
 }
-  List<String>appBarTitels=['home','categories','timline','profile'];
+  List<String>appBarTitels=['home','categories','profile'];
 
 
 

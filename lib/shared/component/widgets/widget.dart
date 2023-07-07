@@ -99,7 +99,8 @@ Widget LoginRegisterButton(
       ),
     );
 
-   FocusedMenuItem focusedMenuItem({required TextEditingController controller  ,required String text,required IconData icon,required context,required int id})=>  FocusedMenuItem(
+   FocusedMenuItem focusedMenuItem({required TextEditingController controller  ,required String text,required IconData icon,required context,required int id})=>
+       FocusedMenuItem(
        onPressed: ()async{
          controller.text=text;
          CacheHelper.setData(key: 'categoryId', value: id).then((value) async{

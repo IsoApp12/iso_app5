@@ -8,7 +8,10 @@ class WorkerRegisterSuccess extends RegistrationStates{
   int type;
   WorkerRegisterSuccess(this.type);
 }
-class WorkerRegisterError extends RegistrationStates{}
+class WorkerRegisterError extends RegistrationStates{
+  String ? onError;
+  WorkerRegisterError(this.onError);
+}
 class UserLoginLoading extends RegistrationStates{}
 class UserLoginSuccess extends RegistrationStates{
   UserLogin userLogin;
@@ -18,7 +21,10 @@ class UserLoginError extends RegistrationStates{}
 class UserLoginAssigning extends RegistrationStates{}
 class UserLoginAssigningWorker extends RegistrationStates{}
 class UserLoginAssigningCustomer extends RegistrationStates{}
-class CustomerRegisterError extends RegistrationStates{}
+class CustomerRegisterError extends RegistrationStates{
+  String?  onError;
+  CustomerRegisterError(this.onError);
+}
 class CustomerRegisterLoading extends RegistrationStates{}
 class CustomerRegisterSuccess extends RegistrationStates{
   int type;
@@ -70,3 +76,6 @@ class CustomerAdressError extends RegistrationStates{}
 class updatStateWorkerLoading extends RegistrationStates{}
 class updatStateWorkerSuccess extends RegistrationStates{}
 class updatStateWorkerError extends RegistrationStates{}
+class ServicesCreateUserLoadingState extends RegistrationStates{}
+class ServicesCreateUserSuccessState extends RegistrationStates{}
+class ServicesCreateUserErrorState extends RegistrationStates{}

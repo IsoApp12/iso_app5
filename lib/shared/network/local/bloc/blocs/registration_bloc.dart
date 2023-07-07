@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +26,7 @@ import 'package:iso_app_5/shared/network/local/bloc/states/states_services_worke
 import 'package:iso_app_5/shared/network/local/cache_helper/cache_helper.dart';
 
 import '../../../../../models/back_end/worker/userlogin.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 class ServicesBlocRegistration extends Cubit<RegistrationStates> {
   ServicesBlocRegistration() : super(InitRegistration());
 
@@ -139,7 +141,7 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
       emit(WorkerRegisterSuccess(0));
     }).catchError((onError) {
       print(onError);
-      emit(WorkerRegisterError());
+      emit(WorkerRegisterError(onError.toString()));
     });
   }
   Position? position;
@@ -445,7 +447,7 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
 
     }).catchError((onError) {
       print(onError);
-      emit(CustomerRegisterError());
+      emit(CustomerRegisterError(onError.toString()));
     });
   }
   Future<void> profilePickerCustomer() async {
@@ -548,3 +550,14 @@ class ServicesBlocRegistration extends Cubit<RegistrationStates> {
 
 
 }
+//worker firbase ------------------------------------------------------------
+// void createWorkerCollection({required String name ,required String email ,required String phone,required String Id}){
+//   FirebaseFirestore.instance.collection('useres').doc(uId).set(userModel.toMap())
+//       .then((value) {
+//     emit(ServicesCreateUserSuccessState());
+//
+//   })
+//       .catchError((onError){
+//     emit(ServicesCreateUserErrorState());
+//   });
+// }

@@ -24,13 +24,44 @@ class SignUp extends StatelessWidget {
       listener:(context,states){
         if(states is WorkerRegisterSuccess) {
           Navigator.push(context, MaterialPageRoute(builder: (context) =>
-              Verify(type: states.type, email: emailController.text,)));
+              Verify(type: 0, email: emailController.text,)));
         }
         else  if(states is CustomerRegisterSuccess) {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>Verify(type:states.type  ,email: emailController.text,))) ;
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>Verify(type:1  ,email: emailController.text,))) ;
 
 
           }
+        else if(states is CustomerRegisterError  ){
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.redAccent,
+
+                content: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Text('The email must be a valid email address&The password must be at least 6 characters&The phone must be 11 digits')),
+              ),
+                ),
+
+
+          );
+        }
+        else if(states is WorkerRegisterError  ){
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Text('The email must be a valid email address&The password must be at least 6 characters&The phone must be 11 digits')),
+                ),
+                backgroundColor: Colors.redAccent,
+
+              )
+          );
+        }
+
       
         },
 

@@ -48,15 +48,16 @@ dependencies:
   location: ^4.4.0
   geolocator: ^9.0.2
   carousel_slider: ^4.2.1
-  firebase_core: ^2.13.0
+  firebase_core: ^2.14.0
   firebase_auth: ^4.6.1
   firebase_messaging: ^14.6.1
-  firebase_storage: ^11.2.1
+  firebase_storage: ^11.2.4
   conditional_builder_null_safety: ^0.0.6
   url_launcher: ^6.1.11
   flutter_phone_direct_caller: ^2.1.1
   permission_handler: ^10.2.0
   date_picker_timeline: ^1.2.3
+  cloud_firestore: ^4.8.2
   geocoder2: ^1.4.0
   slide_drawer: ^1.0.3
   file_picker: ^5.3.2
